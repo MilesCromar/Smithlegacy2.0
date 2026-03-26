@@ -5,7 +5,8 @@
       "firebase.json",
       ".firebase",
       ".git",
-      "node_modules"
+      "node_modules",
+      "firestore.rules"
     ],
     "rewrites": [
       {
@@ -13,5 +14,8 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
