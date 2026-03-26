@@ -1,1 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Smith Legacy 2.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scrollbar-width: none; }
+    html::-webkit-scrollbar { display: none; }
+    body { font-family: 'Inter', sans-serif; background: #c8c8c8; color: #2a2a2a; min-height: 100vh; }
+    :root {
+      --bg: #c8c8c8; --surface: #d8d8d8; --surface2: #e0e0e0; --border: #b0b0b0;
+      --dark: #2a2a2a; --dark2: #3a3a3a; --muted: #6a6a6a; --gold: #f0c040;
+      --green: #3a8a3a; --red: #c03030; --blue: #3a6a9a;
+      --easy-color: #2eaa2e; --normal-color: #2870c0; --hard-color: #e02020; --extreme-color: #e8a800;
+    }
 
+    .page { display: none; min-height: calc(100vh - 72px); }
+    .page.active { display: block; }
+
+    /* Top Bar */
+    .top-bar { background: var(--dark); color: #e0e0e0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; height: 48px; }
+    .top-bar-logo { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e0e0e0; white-space: nowrap; }
+    .top-bar-nav { display: flex; align-items: center; gap: 4px; position: absolute; left: 50%; transform: translateX(-50%); }
+    .nav-tab { padding: 6px 14px; border: none; background: transparent; color: #888; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .nav-tab:hover { color: #ccc; }
+    .nav-tab.active { color: #e0e0e0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+    .sc-display { display: flex; align-items: center; gap: 5px; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); }
+    .sc-icon { font-size: 16px; }
+    .top-bar-avatar { width: 30px; height: 30px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; color: var(--dark); cursor: pointer; }
+    .top-bar-logout { background: none; border: none; color: #888; font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; padding: 4px 8px; }
+    .top-bar-logout:hover { color: #e0e0e0; }
+
+    /* Container */
+    .container { max-width: 520px; margin: 0 auto; padding: 16px; }
+
+    /* Cards */
+    .card { background: var(--surface); border: 2px solid var(--border); padding: 16px; margin-bottom: 12px; }
+
+    /* Buttons */
+    .btn { display: block; width: 100%; padding: 12px; background: var(--dark); color: #e0e0e0; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 2px solid #1a1a1a; cursor: pointer; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; }
+    .btn:active { opacity: 0.7; }
+    .btn-ghost { background: transparent; border: 2px solid var(--border); color: var(--muted); }
+    .btn-ghost:hover { border-color: var(--dark); color: var(--dark); }
+    .btn-sm { display: inline-block; width: auto; padding: 6px 16px; font-size: 13px; letter-spacing: 1px; }
+    .btn-green { background: var(--green); border-color: #2a6a2a; }
+    .btn-red { background: var(--red); border-color: #901818; }
+    .btn-gold { background: var(--gold); border-color: #c8a030; color: var(--dark); }
+
+    /* Fields */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
+    .field input, .field select { width: 100%; background: var(--surface2); border: 2px solid var(--border); padding: 10px 12px; color: var(--dark); font-size: 15px; outline: none; font-family: 'Inter', sans-serif; }
+    .field input:focus, .field select:focus { border-color: var(--dark); }
+    .field select option { background: var(--surface2); }
+
+    /* Auth pages */
+    .auth-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+    .auth-card { background: var(--surface); border: 2px solid var(--border); padding: 32px 24px; max-width: 400px; width: 100%; }
+    .auth-logo { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 4px; color: var(--dark); }
+    .auth-sub { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 28px; }
+    .link-row { text-align: center; margin-top: 14px; font-size: 13px; color: var(--muted); }
+    .link { color: var(--dark); cursor: pointer; text-decoration: underline; font-weight: 600; }
+    .err { color: var(--red); font-size: 13px; text-align: center; margin-top: 8px; min-height: 18px; }
+
+    /* Announcement Banner */
+    .announce-banner { background: #e8e0c8; border: 2px solid var(--gold); padding: 12px 16px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; }
+    .announce-banner.show { display: flex; }
+    .announce-banner-icon { font-size: 18px; flex-shrink: 0; }
+    .announce-banner-text { font-size: 13px; color: var(--dark); flex: 1; line-height: 1.5; font-weight: 500; }
+
+    /* Daily Reward */
+    .daily-reward { background: var(--surface); border: 2px solid var(--gold); padding: 16px; margin-bottom: 12px; text-align: center; }
+    .daily-reward-title { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .daily-reward .btn-gold { margin-top: 8px; }
+    .daily-claimed { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+    /* Stats Row */
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .stat-box { background: var(--surface); border: 2px solid var(--border); padding: 12px; text-align: center; }
+    .stat-num { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--dark); }
+    .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+    /* Progress */
+    .prog-wrap { margin-bottom: 16px; }
+    .prog-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .prog-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+    .prog-count { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; }
+    .prog-track { background: var(--border); height: 8px; overflow: hidden; }
+    .prog-fill { height: 100%; background: var(--dark); transition: width 0.6s ease; }
+
+    /* Filter Bar */
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; border: 2px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Rajdhani', sans-serif; transition: all 0.15s; }
+    .filter-btn:hover { border-color: var(--dark); color: var(--dark); }
+    .filter-btn.active { background: var(--dark); border-color: #1a1a1a; color: #e0e0e0; }
+
+    /* Achievement Cards */
+    .ach-card { background: var(--surface); border: 2px solid var(--border); margin-bottom: 8px; display: flex; align-items: center; cursor: pointer; transition: border-color 0.15s; min-height: 80px; position: relative; overflow: hidden; }
+    .ach-card:hover { border-color: var(--dark); }
+    .ach-card.done { border-color: var(--green); background: #d0e8d0; }
+    .ach-card.pending { border-color: var(--gold); background: #e8e0c8; cursor: default; }
+    .ach-card.pending:hover { border-color: var(--gold); }
+    .ach-card.locked { border-color: var(--border); background: #c0c0c0; cursor: pointer; }
+    .ach-card.locked:hover { border-color: var(--dark); }
+    .ach-card-bar { width: 4px; align-self: stretch; flex-shrink: 0; background: var(--border); }
+    .ach-card.done .ach-card-bar { background: var(--green); }
+    .ach-card.pending .ach-card-bar { background: var(--gold); }
+    .ach-card.locked .ach-card-bar { background: #999; }
+    .ach-card-icon-wrap { width: 72px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .ach-card-icon { width: 50px; height: 50px; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative; }
+    .ach-card.done .ach-card-icon { border-color: var(--green); }
+    .ach-card.locked .ach-card-icon { border-color: #999; }
+    .ach-rarity { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; padding: 1px 6px; white-space: nowrap; letter-spacing: 0.5px; text-transform: uppercase; }
+    .rarity-easy { background: var(--easy-color); color: #fff; }
+    .rarity-normal { background: var(--normal-color); color: #fff; }
+    .rarity-hard { background: var(--hard-color); color: #fff; }
+    .rarity-extreme { background: var(--extreme-color); color: var(--dark); }
+    .ach-card-body { flex: 1; padding: 12px 10px 12px 4px; }
+    .ach-card-label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+    .ach-card-label.verified { color: var(--green); }
+    .ach-card-label.pending-lbl { color: #a08020; }
+    .ach-card-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.1; margin-bottom: 3px; }
+    .ach-card-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .ach-card-right { padding: 0 14px 0 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+    .ach-sc { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--gold); }
+    .ach-check { width: 24px; height: 24px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .ach-card.done .ach-check { border-color: var(--green); background: var(--green); color: #fff; }
+    .ach-card.pending .ach-check { border-color: var(--gold); background: rgba(240,192,64,0.3); color: #a08020; }
+    .first-earner { font-size: 10px; color: var(--gold); font-weight: 600; margin-top: 2px; }
+
+    /* Coin Flip */
+    .flip-area { text-align: center; padding: 24px 0; }
+    .flip-balance { font-family: 'Rajdhani', sans-serif; font-size: 48px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .flip-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 24px; }
+    .flip-input-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+    .flip-pick { display: flex; gap: 8px; margin-bottom: 16px; }
+    .flip-pick-btn { flex: 1; padding: 10px; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: 2px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+    .flip-pick-btn:hover { border-color: var(--dark); color: var(--dark); }
+    .flip-pick-btn.active { background: var(--dark); border-color: #1a1a1a; color: #e0e0e0; }
+    .flip-input { flex: 1; background: var(--surface2); border: 2px solid var(--border); padding: 12px; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; text-align: center; color: var(--dark); outline: none; }
+    .flip-input:focus { border-color: var(--dark); }
+    .flip-input::placeholder { color: var(--muted); }
+    .flip-result { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; min-height: 50px; display: flex; align-items: center; justify-content: center; margin-top: 16px; }
+    .flip-result.win { color: var(--green); }
+    .flip-result.lose { color: var(--red); }
+    .flip-coin { font-size: 64px; margin-bottom: 16px; display: inline-block; }
+    .flip-coin.flipping { animation: coinFlip 0.6s ease-out; }
+    @keyframes coinFlip {
+      0% { transform: rotateY(0deg) scale(1); }
+      50% { transform: rotateY(540deg) scale(1.2); }
+      100% { transform: rotateY(1080deg) scale(1); }
+    }
+    .flip-history { margin-top: 20px; }
+    .flip-history-title { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+    .flip-history-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--surface); border: 2px solid var(--border); margin-bottom: 4px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; }
+
+    /* Leaderboard */
+    .lb-toggle { display: flex; background: var(--surface); border: 2px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+    .lb-toggle-btn { flex: 1; padding: 10px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+    .lb-toggle-btn.active { background: var(--dark); color: #e0e0e0; }
+    .lb-row { background: var(--surface); border: 2px solid var(--border); padding: 14px 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 14px; }
+    .lb-row.first { border-color: var(--gold); background: #e8e0c8; }
+    .lb-row.me { border-color: var(--dark); background: #d0d0d0; }
+    .lb-row.first.me { border-color: var(--gold); background: #e8e0c8; }
+    .lb-icon { font-size: 22px; width: 36px; text-align: center; }
+    .lb-rank { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; width: 30px; text-align: center; color: var(--muted); }
+    .lb-name { flex: 1; font-size: 14px; font-weight: 600; }
+    .lb-sub { font-size: 11px; color: var(--muted); }
+    .lb-pts { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); }
+
+    /* Period rows */
+    .period-row { background: var(--surface); border: 2px solid var(--border); padding: 14px 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 14px; }
+    .period-row.first { border-color: var(--gold); background: #e8e0c8; }
+    .period-icon { font-size: 22px; width: 36px; text-align: center; }
+
+    /* Modal */
+    .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .modal-wrap.open { display: flex; }
+    .modal { background: var(--surface); border: 2px solid var(--border); padding: 24px; max-width: 380px; width: 100%; }
+    .modal-preview { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 2px solid var(--border); padding: 12px; margin-bottom: 16px; }
+    .modal-icon-big { font-size: 28px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 2px solid var(--border); flex-shrink: 0; }
+    .modal-ach-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; }
+    .modal-ach-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .modal-question { font-size: 14px; text-align: center; margin-bottom: 16px; line-height: 1.6; }
+    .modal-warning { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 16px; }
+    .modal-btns { display: flex; gap: 8px; }
+    .modal-btns .btn { flex: 1; }
+
+    /* Popup toast */
+    .popup { position: fixed; bottom: 80px; right: 12px; z-index: 200; background: var(--dark); border: 2px solid var(--green); padding: 12px 16px; max-width: 300px; display: none; color: #e0e0e0; }
+    .popup.show { display: block; animation: popUp 0.3s ease; }
+    @keyframes popUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .popup-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+    .popup-msg { font-size: 12px; color: #b0b0b0; }
+
+    /* Mod Queue */
+    .mod-card { background: var(--surface); border: 2px solid var(--border); padding: 14px; margin-bottom: 8px; }
+    .mod-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .mod-student { font-size: 15px; font-weight: 600; }
+    .mod-period { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border: 1px solid var(--border); font-weight: 600; }
+    .mod-ach { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: var(--surface2); border: 2px solid var(--border); padding: 10px; }
+    .mod-ach-icon { font-size: 20px; }
+    .mod-ach-name { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; }
+    .mod-ach-desc { font-size: 11px; color: var(--muted); }
+    .mod-actions { display: flex; gap: 8px; }
+    .mod-announce-wrap { background: var(--surface); border: 2px solid var(--border); padding: 14px; margin-bottom: 12px; }
+    .mod-announce-input { width: 100%; background: var(--surface2); border: 2px solid var(--border); padding: 10px; color: var(--dark); font-size: 14px; outline: none; resize: none; font-family: 'Inter', sans-serif; }
+    .mod-announce-input:focus { border-color: var(--dark); }
+    .mod-sort-toggle { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; margin-bottom: 10px; display: inline-block; font-weight: 600; }
+
+    /* Profile Page */
+    .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .profile-avatar-big { width: 64px; height: 64px; background: var(--dark); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 28px; color: var(--gold); flex-shrink: 0; }
+    .profile-name { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 1px; }
+    .profile-info { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+    .profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .profile-stat { background: var(--surface2); border: 2px solid var(--border); padding: 12px; text-align: center; }
+    .profile-stat-num { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; }
+    .profile-stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; font-weight: 600; }
+    .profile-ach-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .profile-ach-badge { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 2px solid var(--border); padding: 4px 10px; font-size: 12px; font-weight: 600; }
+
+    /* Unlock modal */
+    .unlock-cost { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold); text-align: center; margin-bottom: 8px; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 40px 16px; color: var(--muted); font-size: 14px; }
+
+    /* Section label */
+    .section-label { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin: 16px 0 8px; font-weight: 600; }
+
+    /* Suggest button */
+    .suggest-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: var(--surface); border: 2px solid var(--border); color: var(--dark); font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; margin-bottom: 12px; }
+    .suggest-btn:hover { border-color: var(--dark); }
+  </style>
+</head>
+<body>
+
+<div class="popup" id="popup">
+  <div class="popup-title" id="popup-title">Success</div>
+  <div class="popup-msg" id="popup-msg"></div>
+</div>
+
+<!-- CLAIM MODAL -->
+<div class="modal-wrap" id="modal">
+  <div class="modal">
+    <div class="modal-preview" id="modal-preview"></div>
+    <div class="modal-question">Are you sure you want to claim this achievement?</div>
+    <div class="modal-warning">A mod will review this. Only claim if you actually did it.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="confirmClaim()">Claim It</button>
+    </div>
+  </div>
+</div>
+
+<!-- UNLOCK SECRET MODAL -->
+<div class="modal-wrap" id="unlock-modal">
+  <div class="modal">
+    <div class="modal-preview" id="unlock-modal-preview"></div>
+    <div class="modal-question">Spend SC to reveal this secret achievement?</div>
+    <div class="unlock-cost" id="unlock-cost"></div>
+    <div class="modal-warning">This will deduct SC from your balance.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeUnlockModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="confirmUnlock()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESET SERVER MODAL -->
+<div class="modal-wrap" id="reset-modal">
+  <div class="modal">
+    <div class="modal-question">Are you sure you want to reset the entire server?</div>
+    <div class="modal-warning" style="color:var(--red);">This will delete ALL users, claims, and first earners. This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeResetModal()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmResetServer()">Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div class="modal-wrap" id="delete-modal">
+  <div class="modal">
+    <div class="modal-question">Are you sure you want to delete this account?</div>
+    <div class="modal-warning" style="color:var(--red);">This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUGGEST MODAL -->
+<div class="modal-wrap" id="suggest-modal">
+  <div class="modal" style="max-width:400px;">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:16px;">SUGGEST AN ACHIEVEMENT</div>
+    <div class="field"><label>Name</label><input id="suggest-name" type="text" placeholder="e.g. Phone Confiscated" maxlength="40" autocomplete="off"></div>
+    <div class="field"><label>Description</label><input id="suggest-desc" type="text" placeholder="What happens to earn this?" maxlength="100" autocomplete="off"></div>
+    <div class="field"><label>Rarity</label>
+      <select id="suggest-rarity"><option value="Easy">Easy</option><option value="Normal" selected>Normal</option><option value="Hard">Hard</option><option value="Extreme">Extreme</option></select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeSuggestModal()">Cancel</button>
+      <button class="btn" onclick="submitSuggestion()">Submit</button>
+    </div>
+    <div class="err" id="suggest-err"></div>
+  </div>
+</div>
+
+<!-- ===== AUTH: LOGIN ===== -->
+<div class="page" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">Smith Legacy</div>
+      <div class="auth-sub">Season 2</div>
+      <div class="field"><label>Username</label><input id="login-user" type="text" autocomplete="off" autocapitalize="none" /></div>
+      <div class="field"><label>Password</label><input id="login-pass" type="password" autocomplete="off" /></div>
+      <button class="btn" onclick="doLogin()">Log In</button>
+      <div class="link-row">No account? <span class="link" onclick="showPage('page-signup')">Sign up</span></div>
+      <div class="err" id="login-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AUTH: SIGNUP ===== -->
+<div class="page active" id="page-signup">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">Smith Legacy</div>
+      <div class="auth-sub">Create Account</div>
+      <div class="field"><label>Username</label><input id="signup-user" type="text" autocomplete="off" autocapitalize="none" /></div>
+      <div class="field"><label>Password</label><input id="signup-pass" type="password" autocomplete="off" /></div>
+      <div class="field"><label>Class Period</label>
+        <select id="signup-period">
+          <option value="">Select period</option>
+          <option>Period 1</option><option>Period 2</option><option>Period 3</option>
+          <option>Period 4</option><option>Period 5</option><option>Period 6</option>
+        </select>
+      </div>
+      <button class="btn" onclick="doSignup()">Create Account</button>
+      <div class="link-row">Have an account? <span class="link" onclick="showPage('page-login')">Log in</span></div>
+      <div class="err" id="signup-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div class="page" id="page-app" style="min-height:auto;">
+
+  <div class="top-bar">
+    <div class="top-bar-logo">Smith Legacy</div>
+    <div class="top-bar-nav" id="top-nav">
+      <button class="nav-tab" data-tab="home" onclick="switchTab('home')">Mod Panel</button>
+      <button class="nav-tab active" data-tab="achieve" onclick="switchTab('achieve')">Achievements</button>
+      <button class="nav-tab" data-tab="flip" onclick="switchTab('flip')">Coin Flip</button>
+      <button class="nav-tab" data-tab="ranks" onclick="switchTab('ranks')">Leaderboard</button>
+    </div>
+    <div class="top-bar-right">
+      <div class="sc-display"><span class="sc-icon">Smithcoin</span> <span id="sc-balance">0</span></div>
+      <div class="top-bar-avatar" id="top-avatar" onclick="openProfile()"></div>
+      <button class="top-bar-logout" onclick="doLogout()">logout</button>
+    </div>
+  </div>
+
+  <!-- MOD PANEL TAB (mods only) -->
+  <div id="tab-home" style="display:none;">
+    <div class="container">
+      <div class="announce-banner" id="announce-banner">
+        <div class="announce-banner-icon">📢</div>
+        <div class="announce-banner-text" id="announce-text"></div>
+      </div>
+      <div id="mod-home-section"></div>
+    </div>
+  </div>
+
+  <!-- ACHIEVE TAB -->
+  <div id="tab-achieve" style="display:none;">
+    <div class="container">
+      <div id="daily-reward-area"></div>
+      <div class="stat-row" id="home-stats"></div>
+      <div class="prog-wrap" id="home-progress"></div>
+      <button class="suggest-btn" onclick="openSuggestModal()">SUGGEST AN ACHIEVEMENT</button>
+      <div class="filter-bar" id="filter-bar"></div>
+      <div id="ach-list"></div>
+    </div>
+  </div>
+
+  <!-- FLIP TAB -->
+  <div id="tab-flip" style="display:none;">
+    <div class="container">
+      <div class="card">
+        <div class="flip-area">
+          <div class="flip-coin" id="flip-coin">🪙</div>
+          <div class="flip-balance" id="flip-balance">0</div>
+          <div class="flip-label">Your Smithcoins</div>
+          <div class="flip-input-wrap">
+            <input class="flip-input" id="flip-bet" type="number" min="1" placeholder="Bet amount" />
+            <button class="btn btn-gold btn-sm" onclick="allIn()" style="width:90px;">ALL IN</button>
+          </div>
+          <div class="flip-pick" id="flip-pick">
+            <button class="flip-pick-btn active" data-side="heads" onclick="pickSide('heads')">Heads</button>
+            <button class="flip-pick-btn" data-side="tails" onclick="pickSide('tails')">Tails</button>
+          </div>
+          <button class="btn" onclick="doFlip()" id="flip-btn">Flip!</button>
+          <div class="flip-result" id="flip-result"></div>
+        </div>
+      </div>
+      <div class="flip-history" id="flip-history"></div>
+    </div>
+  </div>
+
+  <!-- RANKS TAB -->
+  <div id="tab-ranks" style="display:none;">
+    <div class="container">
+      <div class="lb-toggle">
+        <button class="lb-toggle-btn active" data-mode="students" onclick="setLbMode('students')">Students</button>
+        <button class="lb-toggle-btn" data-mode="daily" onclick="setLbMode('daily')">Daily Achievement</button>
+      </div>
+      <div id="lb-list"></div>
+      <div id="daily-ach-display" style="display:none;"></div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-wrap" id="profile-modal" onclick="if(event.target===this)closeProfile()">
+  <div class="modal" style="max-width:420px;" id="profile-page-content"></div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAOn1zrafc6F6AebZHL3z8O7TNv1V1JexE",
+  authDomain: "smithlagacy2.firebaseapp.com",
+  projectId: "smithlagacy2",
+  storageBucket: "smithlagacy2.firebasestorage.app",
+  messagingSenderId: "1070939423945",
+  appId: "1:1070939423945:web:f05cb621e0dac635c53918"
+});
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+// ===================== DATA =====================
+
+const SC_VALUES = { Easy: 25, Normal: 75, Hard: 150, Extreme: 300 };
+const DAILY_REWARD = 25;
+
+const ACHIEVEMENTS = [
+  // ——— MR. SMITH'S GREATEST HITS ———
+  { id:'a16', icon:'🗣️', name:'Alright People', desc:"Witnessed Mr. Smith open class with his classic 'alright people' or 'ok people'", rarity:'Easy', category:"Mr. Smith's Greatest Hits" },
+  { id:'a14', icon:'🫢', name:'Buttttt...', desc:"Mr. Smith hits you with the drawn-out 'but...'", rarity:'Easy', category:"Mr. Smith's Greatest Hits" },
+  { id:'a75', icon:'🙋', name:'Heads Up', desc:"Mr. Smith says to everyone 'heads up people'", rarity:'Easy', category:"Mr. Smith's Greatest Hits" },
+  { id:'a50', icon:'👴', name:'Back in My Day', desc:'Mr. Smith starts a story about when he was younger or talks about his family', rarity:'Easy', category:"Mr. Smith's Greatest Hits" },
+  { id:'a22', icon:'🥤', name:'Happy Juice', desc:'Spotted Mr. Smith sipping from the legendary happy juice cup', rarity:'Normal', category:"Mr. Smith's Greatest Hits" },
+  { id:'a23', icon:'🎓', name:'Professor Mode', desc:'Mr. Smith talked about the professor', rarity:'Normal', category:"Mr. Smith's Greatest Hits" },
+  { id:'a20', icon:'🎤', name:'On a Rant', desc:'Mr. Smith went on a full unprompted rant about something totally unrelated', rarity:'Normal', category:"Mr. Smith's Greatest Hits" },
+  { id:'a30', icon:'🤬', name:'BEEEP', desc:'Mr. Smith threatens to say a bad word', rarity:'Normal', category:"Mr. Smith's Greatest Hits" },
+  { id:'a25', icon:'🤙', name:'Gen Z Attempt', desc:'Mr. Smith tried to use Gen Z slang and it was genuinely painful to witness', rarity:'Normal', category:"Mr. Smith's Greatest Hits" },
+  { id:'a17', icon:'👀', name:'Death Stare', desc:"Made direct eye contact with Mr. Smith's full-power death stare", rarity:'Hard', category:"Mr. Smith's Greatest Hits" },
+  { id:'a26', icon:'🛑', name:'Stop... SPEAKING', desc:"Mr. Smith hit you with the full 'stop... speaking' — pause included", rarity:'Hard', category:"Mr. Smith's Greatest Hits" },
+  { id:'a24', icon:'😶', name:'Zoned Out', desc:'Mr. Smith zoned out during class', rarity:'Hard', category:"Mr. Smith's Greatest Hits" },
+  { id:'a28', icon:'😡', name:'Actually Mad', desc:'Mr. Smith got genuinely, visibly mad at the class — not just annoyed', rarity:'Extreme', category:"Mr. Smith's Greatest Hits" },
+
+  // ——— STUDENT SPOTLIGHT ———
+  { id:'a1', icon:'🎉', name:'Welcome Aboard', desc:'Joined Smith Legacy — welcome to the leaderboard!', rarity:'Easy', category:'Student Spotlight' },
+  { id:'a15', icon:'👆', name:'Please Look Up', desc:'Mr. Smith had to specifically tell you to look up or look at the board', rarity:'Easy', category:'Student Spotlight' },
+  { id:'a13', icon:'🙊', name:'Shushed', desc:'Got personally shushed by Mr. Smith mid-conversation', rarity:'Easy', category:'Student Spotlight' },
+  { id:'a49', icon:'💻', name:'Chromebook Loaner', desc:"Mr. Smith talked about how many people got loaners or hit you with the 'oh oh'", rarity:'Easy', category:'Student Spotlight' },
+  { id:'a18', icon:'🍬', name:'Gum Suspect', desc:'Mr. Smith thought you had gum — guilty or not', rarity:'Normal', category:'Student Spotlight' },
+  { id:'a72', icon:'📢', name:'Called Out', desc:'Mr. Smith calls you out in front of the whole class', rarity:'Normal', category:'Student Spotlight' },
+  { id:'a19', icon:'💻', name:'Canvas Modules', desc:'Mr. Smith tells you to go to Canvas modules', rarity:'Normal', category:'Student Spotlight' },
+  { id:'a12', icon:'🌟', name:'Mr. Smith Approved', desc:"Earned a genuine 'great point' or 'exactly right' from Mr. Smith", rarity:'Hard', category:'Student Spotlight' },
+  { id:'a46', icon:'😆', name:'Make Mr. Smith Laugh', desc:'Say something that makes Mr. Smith laugh', rarity:'Hard', category:'Student Spotlight' },
+  { id:'a73', icon:'🤦', name:'Read the Room', desc:'Say something really stupid while Mr. Smith is in serious mode', rarity:'Hard', category:'Student Spotlight' },
+  { id:'a76', icon:'🤧', name:'Sick!', desc:"Sneeze until Mr. Smith suspects you're doing it on purpose", rarity:'Hard', category:'Student Spotlight' },
+  { id:'a27', icon:'⚠️', name:'Detention Threat', desc:'Mr. Smith threatened someone in the class with detention', rarity:'Hard', category:'Student Spotlight' },
+  { id:'a56', icon:'📵', name:'Phone Confiscated', desc:'Mr. Smith actually takes your phone away', rarity:'Extreme', category:'Student Spotlight' },
+  { id:'a68', icon:'📞', name:'Called Your Parents', desc:'Mr. Smith actually calls your parents because of something you did', rarity:'Extreme', category:'Student Spotlight' },
+
+  // ——— CLASS CHAOS ———
+  { id:'a9', icon:'🤫', name:'Dead Silence', desc:'The whole class went dead quiet for an awkward 5+ seconds', rarity:'Normal', category:'Class Chaos' },
+  { id:'a21', icon:'📱', name:'YouTube Shorts', desc:'Mr. Smith mentioned YouTube Shorts in class', rarity:'Normal', category:'Class Chaos' },
+  { id:'a51', icon:'👏', name:'Standing Ovation', desc:'The entire class claps for something you did', rarity:'Extreme', category:'Class Chaos' },
+  { id:'a57', icon:'🏳️', name:'Class Cancelled', desc:'The class gets so out of hand Mr. Smith just gives up teaching for the day', rarity:'Extreme', category:'Class Chaos' },
+  { id:'a62', icon:'🎤', name:'Drop the Mic', desc:'Say something so legendary the entire class AND Mr. Smith are speechless', rarity:'Extreme', category:'Class Chaos' },
+
+  // ——— THE OUTSIDE WORLD ———
+  { id:'a47', icon:'🍱', name:'Lunch Line', desc:'Catch Mr. Smith getting a meal from the share box', rarity:'Hard', category:'The Outside World' },
+  { id:'a74', icon:'👀', name:'Out of Spawn', desc:'You spotted Mr. Smith outside of school', rarity:'Hard', category:'The Outside World' },
+  { id:'a63', icon:'📰', name:'Made the News', desc:'Something that happened in class actually gets talked about by other teachers or staff', rarity:'Extreme', category:'The Outside World' },
+
+  // ——— META / SMITH LEGACY ———
+  { id:'a71', icon:'🖥️', name:'Smith Legacy', desc:'Mr. Smith catches you on Smith Legacy', rarity:'Hard', category:'Meta' },
+  { id:'a65', icon:'🦄', name:'The Unicorn', desc:'Something happens that has literally never happened before and probably never will again', rarity:'Extreme', category:'Meta' },
+];
+
+const SECRET_ACHIEVEMENTS = [
+  { id:'s7', icon:'🤝', name:'Truce', desc:'Two students who normally argue actually agree on something in class', rarity:'Easy', unlockCost: 100 },
+  { id:'s1', icon:'🔮', name:'The Prophet', desc:'Predict something Mr. Smith is about to say before he says it', rarity:'Normal', unlockCost: 200 },
+  { id:'s6', icon:'🎯', name:'Sniper', desc:'Answer a question correctly that nobody else in the class could get', rarity:'Normal', unlockCost: 200 },
+  { id:'s8', icon:'⏰', name:'Perfect Timing', desc:'Walk into class at the exact second the bell rings', rarity:'Normal', unlockCost: 300 },
+  { id:'s2', icon:'🎭', name:'Double Agent', desc:'Get caught helping two friends with opposite answers on the same question', rarity:'Hard', unlockCost: 500 },
+  { id:'s3', icon:'👻', name:'Ghost Mode', desc:'Go an entire class period without Mr. Smith noticing you exist', rarity:'Hard', unlockCost: 500 },
+  { id:'s4', icon:'🧠', name:'Galaxy Brain', desc:'Ask a question so smart that Mr. Smith has to stop and think about it', rarity:'Extreme', unlockCost: 1000 },
+  { id:'s5', icon:'💀', name:'Final Boss', desc:'Get Mr. Smith to break character and just stare at you in disbelief', rarity:'Extreme', unlockCost: 1000 },
+];
+
+const ALL_ACHIEVEMENTS = [...ACHIEVEMENTS, ...SECRET_ACHIEVEMENTS];
+
+const MOD_USERNAMES = ['thecreator', 'milesthegoat'];
+
+// ===================== STATE =====================
+
+let currentUser = null;
+let currentUserData = null;
+let firstEarners = {};
+let activeFilter = 'All';
+let lbMode = 'students';
+let modSortNewest = false;
+let pendingClaimId = null;
+let pendingUnlockId = null;
+let flipHistory = [];
+let flipSide = 'heads';
+let deleteTargetUser = null;
+
+// ===================== UTILS =====================
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showPopup(msg, title) {
+  const p = document.getElementById('popup');
+  document.getElementById('popup-title').textContent = title || 'Success';
+  document.getElementById('popup-msg').textContent = msg;
+  p.classList.add('show');
+  setTimeout(() => p.classList.remove('show'), 3000);
+}
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  ['home','achieve','flip','ranks'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+  if (tab === 'achieve') renderAchievements();
+  if (tab === 'flip') renderFlipTab();
+  if (tab === 'ranks') renderLeaderboard();
+  if (tab === 'home') renderHome();
+}
+
+function updateAvatar() {
+  const el = document.getElementById('top-avatar');
+  if (el && currentUser) el.textContent = currentUser[0].toUpperCase();
+}
+
+function updateSCDisplay() {
+  const sc = currentUserData?.smithcoins || 0;
+  document.getElementById('sc-balance').textContent = sc.toLocaleString();
+  const flipBal = document.getElementById('flip-balance');
+  if (flipBal) flipBal.textContent = sc.toLocaleString();
+}
+
+// ===================== AUTH =====================
+
+async function doLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-err');
+  errEl.textContent = '';
+  if (!user || !pass) { errEl.textContent = 'Enter username and password'; return; }
+  try {
+    const email = user + '@smithlegacy.app';
+    await auth.signInWithEmailAndPassword(email, pass);
+    const doc = await db.collection('users').doc(user).get();
+    if (!doc.exists) { errEl.textContent = 'Account data not found'; return; }
+    currentUser = user;
+    currentUserData = doc.data();
+    if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
+    if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+    enterApp();
+  } catch (e) {
+    console.error(e);
+    if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') errEl.textContent = 'Account not found or wrong password';
+    else if (e.code === 'auth/wrong-password') errEl.textContent = 'Wrong password';
+    else errEl.textContent = 'Error logging in';
+  }
+}
+
+async function doSignup() {
+  const user = document.getElementById('signup-user').value.trim().toLowerCase();
+  const pass = document.getElementById('signup-pass').value;
+  const period = document.getElementById('signup-period').value;
+  const errEl = document.getElementById('signup-err');
+  errEl.textContent = '';
+  if (!user || user.length < 2 || user.length > 20) { errEl.textContent = 'Username must be 2-20 characters'; return; }
+  if (!/^[a-z0-9_]+$/.test(user)) { errEl.textContent = 'Letters, numbers, underscores only'; return; }
+  if (!pass || pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters'; return; }
+  if (!period) { errEl.textContent = 'Select a class period'; return; }
+  try {
+    // Check if username is already taken in Firestore
+    const existing = await db.collection('users').doc(user).get();
+    if (existing.exists) { errEl.textContent = 'Username taken'; return; }
+    // Create Firebase Auth account
+    const email = user + '@smithlegacy.app';
+    await auth.createUserWithEmailAndPassword(email, pass);
+    // Create Firestore profile
+    const isMod = MOD_USERNAMES.includes(user);
+    const userData = { isMod: isMod, period: period, claims: {}, smithcoins: 0, lastClaimed: '', unlockedAchievements: [] };
+    await db.collection('users').doc(user).set(userData);
+    currentUser = user;
+    currentUserData = userData;
+    enterApp();
+  } catch (e) {
+    console.error(e);
+    if (e.code === 'auth/email-already-in-use') errEl.textContent = 'Username taken';
+    else if (e.code === 'auth/weak-password') errEl.textContent = 'Password must be at least 6 characters';
+    else errEl.textContent = 'Error creating account';
+  }
+}
+
+async function enterApp() {
+  await fetchFirstEarners();
+  showPage('page-app');
+  updateAvatar();
+  // Show/hide Mod Panel tab based on whether user is a mod
+  const modTab = document.querySelector('.nav-tab[data-tab="home"]');
+  if (modTab) modTab.style.display = currentUserData.isMod ? '' : 'none';
+  // Default to achievements for regular users, mod panel for mods
+  switchTab(currentUserData.isMod ? 'home' : 'achieve');
+  updateSCDisplay();
+}
+
+async function doLogout() {
+  try { await auth.signOut(); } catch (e) { console.error(e); }
+  currentUser = null;
+  currentUserData = null;
+  flipHistory = [];
+  showPage('page-login');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
+
+// ===================== AUTO LOGIN (Firebase Auth persists sessions) =====================
+
+auth.onAuthStateChanged(async function(firebaseUser) {
+  if (!firebaseUser || currentUser) return;
+  try {
+    // Extract username from email (username@smithlegacy.app)
+    const user = firebaseUser.email.replace('@smithlegacy.app', '');
+    const doc = await db.collection('users').doc(user).get();
+    if (!doc.exists) return;
+    currentUser = user;
+    currentUserData = doc.data();
+    if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
+    if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+    enterApp();
+  } catch (e) { console.error('Auto-login failed:', e); }
+});
+
+// ===================== FIRST EARNERS =====================
+
+async function fetchFirstEarners() {
+  try {
+    const snap = await db.collection('firstEarners').get();
+    const fe = {};
+    snap.forEach(doc => fe[doc.id] = doc.data().user);
+    firstEarners = fe;
+  } catch (e) { console.error(e); }
+}
+
+// ===================== HOME STATS (shown on achieve tab) =====================
+
+async function renderHomeStats() {
+  try {
+    const doc = await db.collection('users').doc(currentUser).get();
+    if (doc.exists) {
+      currentUserData = doc.data();
+      if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
+      if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+    }
+  } catch (e) { console.error(e); }
+
+  updateSCDisplay();
+
+  const claims = currentUserData.claims || {};
+  const verified = Object.entries(claims).filter(([, v]) => v === 'verified').map(([k]) => k);
+  const pending = Object.entries(claims).filter(([, v]) => v === 'pending').length;
+  const totalAch = ALL_ACHIEVEMENTS.length;
+
+  document.getElementById('home-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-num">${verified.length}</div><div class="stat-lbl">Earned</div></div>
+    <div class="stat-box"><div class="stat-num">${pending}</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gold);">${(currentUserData.smithcoins||0).toLocaleString()}</div><div class="stat-lbl">SC</div></div>
+  `;
+
+  const pct = totalAch > 0 ? Math.round((verified.length / totalAch) * 100) : 0;
+  document.getElementById('home-progress').innerHTML = `
+    <div class="prog-top"><span class="prog-title">Progress</span><span class="prog-count">${verified.length} / ${totalAch}</span></div>
+    <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+  `;
+
+  renderDailyReward();
+}
+
+// ===================== MOD PANEL TAB =====================
+
+async function renderHome() {
+  loadAnnouncement();
+  renderModHomeSection();
+}
+
+// ===================== DAILY REWARD =====================
+
+function renderDailyReward() {
+  const area = document.getElementById('daily-reward-area');
+  if (currentUserData.isMod) { area.innerHTML = ''; return; }
+
+  const today = todayStr();
+  const claimed = currentUserData.lastClaimed === today;
+
+  area.innerHTML = `
+    <div class="daily-reward">
+      <div class="daily-reward-title">🪙 Daily Login Reward</div>
+      ${claimed
+        ? '<div class="daily-claimed">Already claimed today — come back tomorrow!</div>'
+        : `<div style="font-size:14px;margin-bottom:4px;">Claim your free <strong style="color:var(--gold);">${DAILY_REWARD} SC</strong> today!</div>
+           <button class="btn btn-gold" onclick="claimDailyReward()">Claim ${DAILY_REWARD} SC</button>`
+      }
+    </div>
+  `;
+}
+
+async function claimDailyReward() {
+  const today = todayStr();
+  if (currentUserData.lastClaimed === today) return;
+
+  const newBalance = (currentUserData.smithcoins || 0) + DAILY_REWARD;
+  await db.collection('users').doc(currentUser).update({
+    smithcoins: newBalance,
+    lastClaimed: today
+  });
+  currentUserData.smithcoins = newBalance;
+  currentUserData.lastClaimed = today;
+  updateSCDisplay();
+  renderDailyReward();
+  showPopup('+' + DAILY_REWARD + ' SC claimed!', 'Daily Reward');
+}
+
+// ===================== ANNOUNCEMENTS =====================
+
+async function loadAnnouncement() {
+  try {
+    const doc = await db.collection('announcements').doc('current').get();
+    const banner = document.getElementById('announce-banner');
+    if (doc.exists && doc.data().message) {
+      document.getElementById('announce-text').textContent = doc.data().message;
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
+  } catch (e) { console.error(e); }
+}
+
+async function postAnnouncement() {
+  if (currentUser !== 'milesthegoat' && currentUser !== 'thecreator') return;
+  const msg = document.getElementById('mod-announce-input').value.trim();
+  if (!msg) return;
+  await db.collection('announcements').doc('current').set({ message: msg, by: currentUser, time: Date.now() });
+  showPopup('Announcement posted!');
+  renderHome();
+}
+
+async function clearAnnouncement() {
+  if (currentUser !== 'milesthegoat' && currentUser !== 'thecreator') return;
+  await db.collection('announcements').doc('current').delete();
+  showPopup('Announcement cleared!');
+  renderHome();
+}
+
+// ===================== DAILY ACHIEVEMENT =====================
+
+async function setDailyAchievement() {
+  if (currentUser !== 'milesthegoat' && currentUser !== 'thecreator') return;
+  var achId = document.getElementById('daily-ach-select').value;
+  var bonus = parseInt(document.getElementById('daily-ach-bonus').value) || 50;
+  if (!achId) { showPopup('Select an achievement first', 'Error'); return; }
+  try {
+    await db.collection('dailyAchievement').doc('current').set({ achId: achId, bonus: bonus, setBy: currentUser, time: Date.now() });
+    showPopup('Daily achievement set!');
+  } catch (e) { console.error(e); showPopup('Error setting daily achievement', 'Error'); }
+}
+
+async function clearDailyAchievement() {
+  if (currentUser !== 'milesthegoat' && currentUser !== 'thecreator') return;
+  try {
+    await db.collection('dailyAchievement').doc('current').delete();
+    showPopup('Daily achievement cleared!');
+  } catch (e) { console.error(e); showPopup('Error clearing', 'Error'); }
+}
+
+// ===================== MOD HOME SECTION =====================
+
+async function renderModHomeSection() {
+  const el = document.getElementById('mod-home-section');
+  if (!currentUserData.isMod) { el.innerHTML = ''; return; }
+
+  let html = '<div class="section-label">Mod Tools</div>';
+
+  if (currentUser === 'milesthegoat' || currentUser === 'thecreator') {
+    html += `
+      <div class="mod-announce-wrap">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Announcement</div>
+        <textarea class="mod-announce-input" id="mod-announce-input" rows="2" placeholder="Type announcement..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-sm" onclick="postAnnouncement()">Post</button>
+          <button class="btn btn-sm btn-ghost" onclick="clearAnnouncement()">Clear</button>
+        </div>
+      </div>
+      <div class="mod-announce-wrap">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Daily Achievement</div>
+        <select id="daily-ach-select" style="width:100%;background:var(--surface2);border:2px solid var(--border);padding:10px 12px;color:var(--dark);font-size:14px;font-family:'Inter',sans-serif;margin-bottom:8px;">
+          <option value="">Select an achievement</option>
+          ${ALL_ACHIEVEMENTS.map(function(a) { return '<option value="' + a.id + '">' + a.icon + ' ' + a.name + ' (' + a.rarity + ')</option>'; }).join('')}
+        </select>
+        <div class="field"><label>Bonus SC</label><input id="daily-ach-bonus" type="number" value="50" min="0" style="width:100px;" /></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm" onclick="setDailyAchievement()">Set</button>
+          <button class="btn btn-sm btn-ghost" onclick="clearDailyAchievement()">Clear</button>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="section-label">Pending Claims</div>
+    <span class="mod-sort-toggle" onclick="toggleModSort()">Sort: ${modSortNewest ? 'Newest first' : 'Oldest first'}</span>
+    <div id="mod-queue"></div>
+  `;
+
+  if (currentUser === 'milesthegoat') {
+    html += `
+      <div class="section-label" style="margin-top:20px;">Server Reset</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Wipes all user data, claims, and first earners. This cannot be undone.</div>
+      <button class="btn btn-red" onclick="tryResetServer()">Reset Server</button>
+    `;
+  }
+
+  el.innerHTML = html;
+  renderModQueue();
+}
+
+function toggleModSort() {
+  modSortNewest = !modSortNewest;
+  renderModHomeSection();
+}
+
+async function renderModQueue() {
+  const queueEl = document.getElementById('mod-queue');
+  if (!queueEl) return;
+
+  try {
+    const snap = await db.collection('claims').orderBy('time', modSortNewest ? 'desc' : 'asc').get();
+    if (snap.empty) { queueEl.innerHTML = '<div class="empty-state">No pending claims</div>'; return; }
+
+    let html = '';
+    for (const doc of snap.docs) {
+      const c = doc.data();
+      const a = ALL_ACHIEVEMENTS.find(x => x.id === c.achId);
+      if (!a) continue;
+
+      let period = '';
+      try {
+        const userDoc = await db.collection('users').doc(c.user).get();
+        if (userDoc.exists) period = userDoc.data().period || '';
+      } catch (e) {}
+
+      html += `
+        <div class="mod-card">
+          <div class="mod-card-header">
+            <span class="mod-student">${c.user}</span>
+            <span class="mod-period">${period}</span>
+          </div>
+          <div class="mod-ach">
+            <span class="mod-ach-icon">${a.icon}</span>
+            <div><div class="mod-ach-name">${a.name}</div><div class="mod-ach-desc">${a.desc}</div></div>
+          </div>
+          <div class="mod-actions">
+            <button class="btn btn-sm btn-green" onclick="modDecide('${doc.id}','${c.user}','${c.achId}','verify')">Verify</button>
+            <button class="btn btn-sm btn-red" onclick="modDecide('${doc.id}','${c.user}','${c.achId}','deny')">Deny</button>
+          </div>
+        </div>
+      `;
+    }
+    queueEl.innerHTML = html;
+  } catch (e) { queueEl.innerHTML = '<div class="empty-state">Error loading queue</div>'; console.error(e); }
+}
+
+async function modDecide(claimDocId, user, achId, decision) {
+  try {
+    const a = ALL_ACHIEVEMENTS.find(x => x.id === achId);
+    const batch = db.batch();
+    const status = decision === 'verify' ? 'verified' : 'denied';
+    batch.update(db.collection('users').doc(user), { ['claims.' + achId]: status });
+    batch.delete(db.collection('claims').doc(claimDocId));
+    await batch.commit();
+
+    if (decision === 'verify') {
+      const scReward = SC_VALUES[a.rarity] || 0;
+      if (scReward > 0) {
+        const userDoc = await db.collection('users').doc(user).get();
+        const userData = userDoc.data();
+        const newBal = (userData.smithcoins || 0) + scReward;
+        await db.collection('users').doc(user).update({ smithcoins: newBal });
+      }
+      const feDoc = await db.collection('firstEarners').doc(achId).get();
+      if (!feDoc.exists) {
+        await db.collection('firstEarners').doc(achId).set({ user: user, time: Date.now() });
+        firstEarners[achId] = user;
+      }
+      showPopup(user + ' unlocked "' + (a?.name) + '" (+' + (SC_VALUES[a.rarity]||0) + ' SC)!');
+    } else {
+      showPopup('Denied ' + user + "'s claim for \"" + (a?.name) + '"', 'Denied');
+    }
+    renderModQueue();
+  } catch (e) { console.error(e); showPopup('Error processing claim', 'Error'); }
+}
+
+// ===================== ACCOUNT DELETE =====================
+
+function tryDeleteAccount() {
+  const user = document.getElementById('delete-user-input')?.value.trim().toLowerCase();
+  if (!user) return;
+  deleteTargetUser = user;
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+function closeDeleteModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+  deleteTargetUser = null;
+}
+
+async function confirmDelete() {
+  if (!deleteTargetUser || currentUser !== 'milesthegoat') return;
+  try {
+    await db.collection('users').doc(deleteTargetUser).delete();
+    const claimsSnap = await db.collection('claims').where('user', '==', deleteTargetUser).get();
+    if (!claimsSnap.empty) {
+      const batch = db.batch();
+      claimsSnap.forEach(c => batch.delete(c.ref));
+      await batch.commit();
+    }
+    showPopup('Deleted account: ' + deleteTargetUser);
+    closeDeleteModal();
+    if (document.getElementById('delete-user-input')) document.getElementById('delete-user-input').value = '';
+  } catch (e) { console.error(e); showPopup('Error deleting account', 'Error'); }
+}
+
+// ===================== SERVER RESET =====================
+
+function tryResetServer() {
+  if (currentUser !== 'milesthegoat') return;
+  document.getElementById('reset-modal').classList.add('open');
+}
+
+function closeResetModal() {
+  document.getElementById('reset-modal').classList.remove('open');
+}
+
+async function confirmResetServer() {
+  if (currentUser !== 'milesthegoat') return;
+  try {
+    // Delete all users (except nothing — we wipe everything)
+    const usersSnap = await db.collection('users').get();
+    for (const doc of usersSnap.docs) {
+      await doc.ref.delete();
+    }
+    // Delete all claims
+    const claimsSnap = await db.collection('claims').get();
+    for (const doc of claimsSnap.docs) {
+      await doc.ref.delete();
+    }
+    // Delete all first earners
+    const feSnap = await db.collection('firstEarners').get();
+    for (const doc of feSnap.docs) {
+      await doc.ref.delete();
+    }
+    // Delete announcements
+    try { await db.collection('announcements').doc('current').delete(); } catch (e) {}
+    // Delete suggestions
+    const sugSnap = await db.collection('suggestions').get();
+    for (const doc of sugSnap.docs) {
+      await doc.ref.delete();
+    }
+    // Delete current user's own Firebase Auth account
+    try { await auth.currentUser.delete(); } catch (e) { console.error('Auth delete:', e); }
+    closeResetModal();
+    alert('Server has been reset. All data and your account have been wiped. You will need to sign up again.');
+    currentUser = null;
+    currentUserData = null;
+    flipHistory = [];
+    showPage('page-signup');
+  } catch (e) { console.error(e); showPopup('Error resetting server', 'Error'); }
+}
+
+// ===================== ACHIEVEMENTS TAB =====================
+
+function renderAchievements() {
+  renderHomeStats();
+  renderFilterBar();
+  renderAchList();
+}
+
+function renderFilterBar() {
+  const rarities = ['All', 'Easy', 'Normal', 'Hard', 'Extreme'];
+  document.getElementById('filter-bar').innerHTML = rarities.map(function(r) {
+    return '<button class="filter-btn ' + (activeFilter === r ? 'active' : '') + '" onclick="setFilter(\'' + r + '\')">' + r + '</button>';
+  }).join('');
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderAchievements();
+}
+
+function renderAchList() {
+  const claims = currentUserData.claims || {};
+  const unlocked = currentUserData.unlockedAchievements || [];
+  const isMod = currentUserData.isMod;
+
+  var list = [];
+
+  ACHIEVEMENTS.forEach(function(a) {
+    if (activeFilter !== 'All' && a.rarity !== activeFilter) return;
+    list.push({ id:a.id, icon:a.icon, name:a.name, desc:a.desc, rarity:a.rarity, isSecret:false, category:a.category || 'Other' });
+  });
+
+  SECRET_ACHIEVEMENTS.forEach(function(a) {
+    if (activeFilter !== 'All' && a.rarity !== activeFilter) return;
+    list.push({ id:a.id, icon:a.icon, name:a.name, desc:a.desc, rarity:a.rarity, isSecret:true, isUnlocked:unlocked.includes(a.id), unlockCost:a.unlockCost, category:'Secrets' });
+  });
+
+  var el = document.getElementById('ach-list');
+  if (list.length === 0) { el.innerHTML = '<div class="empty-state">No achievements in this category</div>'; return; }
+
+  // Group by category, preserving order
+  var categories = [];
+  var catMap = {};
+  list.forEach(function(a) {
+    if (!catMap[a.category]) { catMap[a.category] = []; categories.push(a.category); }
+    catMap[a.category].push(a);
+  });
+
+  var html = '';
+  categories.forEach(function(cat) {
+    html += '<div class="section-label">' + cat + '</div>';
+    catMap[cat].forEach(function(a) {
+      var status = claims[a.id];
+      var isDone = status === 'verified';
+      var isPending = status === 'pending';
+      var fe = firstEarners[a.id];
+
+      if (a.isSecret && !a.isUnlocked && !isMod) {
+        html += '<div class="ach-card locked" onclick="tryUnlock(\'' + a.id + '\')">' +
+          '<div class="ach-card-bar"></div>' +
+          '<div class="ach-card-icon-wrap"><div class="ach-card-icon">🔒</div></div>' +
+          '<div class="ach-card-body">' +
+          '<div class="ach-card-label">SECRET</div>' +
+          '<div class="ach-card-name">??? Locked</div>' +
+          '<div class="ach-card-desc">Spend ' + a.unlockCost + ' SC to reveal</div>' +
+          '</div>' +
+          '<div class="ach-card-right">' +
+          '<div class="ach-sc" style="color:var(--muted);">' + a.unlockCost + ' SC</div>' +
+          '<div class="ach-check">🔒</div>' +
+          '</div></div>';
+        return;
+      }
+
+      var cardClass = isDone ? 'done' : isPending ? 'pending' : '';
+      var labelClass = isDone ? 'verified' : isPending ? 'pending-lbl' : '';
+      var labelText = isDone ? 'VERIFIED' : isPending ? 'PENDING' : (a.isSecret ? 'SECRET' : 'ACHIEVEMENT');
+      var scVal = SC_VALUES[a.rarity];
+      var onclick = (isDone || isPending || isMod) ? '' : ' onclick="tryClaimAch(\'' + a.id + '\')"';
+
+      html += '<div class="ach-card ' + cardClass + '"' + onclick + '>' +
+        '<div class="ach-card-bar"></div>' +
+        '<div class="ach-card-icon-wrap">' +
+        '<div class="ach-card-icon">' + a.icon + '<span class="ach-rarity rarity-' + a.rarity.toLowerCase() + '">' + a.rarity + '</span></div>' +
+        '</div>' +
+        '<div class="ach-card-body">' +
+        '<div class="ach-card-label ' + labelClass + '">' + labelText + '</div>' +
+        '<div class="ach-card-name">' + a.name + '</div>' +
+        '<div class="ach-card-desc">' + a.desc + '</div>' +
+        (fe ? '<div class="first-earner">&#11088; First: ' + fe + '</div>' : '') +
+        '</div>' +
+        '<div class="ach-card-right">' +
+        '<div class="ach-sc">' + scVal + ' SC</div>' +
+        '<div class="ach-check">' + (isDone ? '&#10003;' : isPending ? '...' : '') + '</div>' +
+        '</div></div>';
+    });
+  });
+
+  el.innerHTML = html;
+}
+
+// ===================== CLAIM MODAL =====================
+
+function tryClaimAch(id) {
+  var a = ALL_ACHIEVEMENTS.find(function(x) { return x.id === id; });
+  if (!a) return;
+  pendingClaimId = id;
+  document.getElementById('modal-preview').innerHTML =
+    '<div class="modal-icon-big">' + a.icon + '</div>' +
+    '<div><div class="modal-ach-name">' + a.name + '</div><div class="modal-ach-desc">' + a.desc + '</div></div>';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  pendingClaimId = null;
+}
+
+async function confirmClaim() {
+  if (!pendingClaimId) return;
+  try {
+    var batch = db.batch();
+    batch.update(db.collection('users').doc(currentUser), { ['claims.' + pendingClaimId]: 'pending' });
+    batch.set(db.collection('claims').doc(), { user: currentUser, achId: pendingClaimId, time: Date.now() });
+    await batch.commit();
+    currentUserData.claims = currentUserData.claims || {};
+    currentUserData.claims[pendingClaimId] = 'pending';
+    closeModal();
+    renderAchList();
+    showPopup('Achievement claim submitted!');
+  } catch (e) { console.error(e); showPopup('Error submitting claim', 'Error'); }
+}
+
+// ===================== SECRET UNLOCK =====================
+
+function tryUnlock(id) {
+  var a = SECRET_ACHIEVEMENTS.find(function(x) { return x.id === id; });
+  if (!a) return;
+  pendingUnlockId = id;
+  document.getElementById('unlock-modal-preview').innerHTML =
+    '<div class="modal-icon-big">🔒</div>' +
+    '<div><div class="modal-ach-name">Secret Achievement</div><div class="modal-ach-desc">Spend SC to reveal what this achievement is</div></div>';
+  document.getElementById('unlock-cost').textContent = a.unlockCost + ' SC';
+  document.getElementById('unlock-modal').classList.add('open');
+}
+
+function closeUnlockModal() {
+  document.getElementById('unlock-modal').classList.remove('open');
+  pendingUnlockId = null;
+}
+
+async function confirmUnlock() {
+  if (!pendingUnlockId) return;
+  var a = SECRET_ACHIEVEMENTS.find(function(x) { return x.id === pendingUnlockId; });
+  if (!a) return;
+
+  var balance = currentUserData.smithcoins || 0;
+  if (balance < a.unlockCost) {
+    showPopup('Not enough SC! Need ' + a.unlockCost + ', have ' + balance, 'Not Enough SC');
+    closeUnlockModal();
+    return;
+  }
+
+  try {
+    var newBalance = balance - a.unlockCost;
+    var newUnlocked = (currentUserData.unlockedAchievements || []).concat([a.id]);
+    await db.collection('users').doc(currentUser).update({
+      smithcoins: newBalance,
+      unlockedAchievements: newUnlocked
+    });
+    currentUserData.smithcoins = newBalance;
+    currentUserData.unlockedAchievements = newUnlocked;
+    updateSCDisplay();
+    closeUnlockModal();
+    renderAchList();
+    showPopup('Unlocked: ' + a.name + '! (-' + a.unlockCost + ' SC)', 'Secret Revealed');
+  } catch (e) { console.error(e); showPopup('Error unlocking', 'Error'); }
+}
+
+// ===================== COIN FLIP =====================
+
+function renderFlipTab() {
+  updateSCDisplay();
+  document.getElementById('flip-result').innerHTML = '';
+  document.getElementById('flip-bet').value = '';
+  flipSide = 'heads';
+  document.querySelectorAll('.flip-pick-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.side === 'heads'); });
+  renderFlipHistory();
+}
+
+function pickSide(side) {
+  flipSide = side;
+  document.querySelectorAll('.flip-pick-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.side === side); });
+}
+
+function allIn() {
+  document.getElementById('flip-bet').value = currentUserData.smithcoins || 0;
+}
+
+async function doFlip() {
+  var betInput = document.getElementById('flip-bet');
+  var bet = parseInt(betInput.value);
+  var balance = currentUserData.smithcoins || 0;
+  var resultEl = document.getElementById('flip-result');
+  var coinEl = document.getElementById('flip-coin');
+
+  if (!bet || bet <= 0) { resultEl.innerHTML = '<span style="color:var(--muted);">Enter a bet amount</span>'; return; }
+  if (bet > balance) { resultEl.innerHTML = '<span style="color:var(--red);">Not enough SC!</span>'; return; }
+
+  var btn = document.getElementById('flip-btn');
+  btn.disabled = true;
+  btn.textContent = 'Flipping...';
+  resultEl.innerHTML = '';
+
+  coinEl.classList.add('flipping');
+
+  var landed = Math.random() < 0.5 ? 'heads' : 'tails';
+  var win = landed === flipSide;
+
+  setTimeout(async function() {
+    coinEl.classList.remove('flipping');
+    btn.disabled = false;
+    btn.textContent = 'Flip!';
+
+    var newBalance;
+    if (win) {
+      newBalance = balance + bet;
+      resultEl.className = 'flip-result win';
+      resultEl.textContent = landed.toUpperCase() + '! +' + bet.toLocaleString() + ' SC!';
+    } else {
+      newBalance = balance - bet;
+      resultEl.className = 'flip-result lose';
+      resultEl.textContent = landed.toUpperCase() + '! -' + bet.toLocaleString() + ' SC.';
+    }
+
+    await db.collection('users').doc(currentUser).update({ smithcoins: newBalance });
+    currentUserData.smithcoins = newBalance;
+    updateSCDisplay();
+    betInput.value = '';
+
+    flipHistory.unshift({ bet: bet, win: win, side: flipSide, landed: landed, time: Date.now() });
+    if (flipHistory.length > 10) flipHistory.pop();
+    renderFlipHistory();
+  }, 700);
+}
+
+function renderFlipHistory() {
+  var el = document.getElementById('flip-history');
+  if (flipHistory.length === 0) { el.innerHTML = ''; return; }
+
+  var rows = '';
+  flipHistory.forEach(function(f) {
+    var pick = f.side ? f.side.toUpperCase() : '?';
+    var land = f.landed ? f.landed.toUpperCase() : '?';
+    rows += '<div class="flip-history-row">' +
+      '<span>' + f.bet.toLocaleString() + ' SC — ' + pick + '</span>' +
+      '<span style="color:' + (f.win ? 'var(--green)' : 'var(--red)') + ';">' +
+      land + ' ' + (f.win ? 'WON +' + f.bet.toLocaleString() : 'LOST -' + f.bet.toLocaleString()) +
+      '</span></div>';
+  });
+
+  el.innerHTML = '<div class="flip-history-title">Recent Flips</div>' + rows;
+}
+
+// ===================== LEADERBOARD =====================
+
+function setLbMode(mode) {
+  lbMode = mode;
+  document.querySelectorAll('.lb-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.mode === mode); });
+  renderLeaderboard();
+}
+
+async function renderLeaderboard() {
+  var listEl = document.getElementById('lb-list');
+  var dailyEl = document.getElementById('daily-ach-display');
+
+  if (lbMode === 'daily') {
+    listEl.style.display = 'none';
+    dailyEl.style.display = 'block';
+    renderDailyAchievement();
+    return;
+  }
+
+  listEl.style.display = 'block';
+  dailyEl.style.display = 'none';
+  listEl.innerHTML = '<div class="empty-state">Loading...</div>';
+
+  try {
+    var snap = await db.collection('users').get();
+    var rows = [];
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      if (!d.isMod) {
+        var verified = Object.entries(d.claims || {}).filter(function(e) { return e[1] === 'verified'; }).map(function(e) { return e[0]; });
+        var totalSC = 0;
+        verified.forEach(function(id) {
+          var a = ALL_ACHIEVEMENTS.find(function(x) { return x.id === id; });
+          if (a) totalSC += SC_VALUES[a.rarity] || 0;
+        });
+        rows.push({ u: doc.id, count: verified.length, sc: totalSC, period: d.period, totalCoins: d.smithcoins || 0 });
+      }
+    });
+
+    rows.sort(function(a, b) { return b.sc - a.sc; });
+    var icons = ['👑', '🥈', '🥉'];
+    if (rows.length) {
+      listEl.innerHTML = rows.map(function(r, i) {
+        var isFirst = i === 0;
+        var isMe = r.u === currentUser;
+        return '<div class="lb-row' + (isFirst ? ' first' : '') + (isMe ? ' me' : '') + '">' +
+          '<div class="lb-icon">' + (icons[i] || '') + '</div>' +
+          '<div class="lb-rank">' + (i + 1) + '</div>' +
+          '<div style="flex:1;">' +
+          '<div style="font-family:\'Rajdhani\',sans-serif;font-size:18px;font-weight:700;">' + r.u + (isMe ? ' <span style="font-size:10px;color:var(--muted);background:var(--surface2);padding:2px 6px;border:1px solid var(--border);">you</span>' : '') + '</div>' +
+          '<div class="lb-sub">' + (r.period || '') + '</div>' +
+          '</div>' +
+          '<div class="lb-pts">' + r.sc.toLocaleString() + ' SC</div></div>';
+      }).join('');
+    } else {
+      listEl.innerHTML = '<div class="empty-state">No scores yet</div>';
+    }
+  } catch (e) { listEl.innerHTML = '<div class="empty-state">Error loading leaderboard</div>'; console.error(e); }
+}
+
+async function renderDailyAchievement() {
+  var el = document.getElementById('daily-ach-display');
+  try {
+    var doc = await db.collection('dailyAchievement').doc('current').get();
+    if (doc.exists && doc.data().achId) {
+      var d = doc.data();
+      var a = ALL_ACHIEVEMENTS.find(function(x) { return x.id === d.achId; });
+      if (a) {
+        var bonus = d.bonus || 50;
+        el.innerHTML =
+          '<div class="card" style="text-align:center;padding:24px;">' +
+          '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Today\'s Daily Achievement</div>' +
+          '<div style="font-size:40px;margin-bottom:8px;">' + a.icon + '</div>' +
+          '<div style="font-family:\'Rajdhani\',sans-serif;font-size:22px;font-weight:700;">' + a.name + '</div>' +
+          '<div style="font-size:13px;color:var(--muted);margin-top:4px;">' + a.desc + '</div>' +
+          '<div style="margin-top:12px;font-family:\'Rajdhani\',sans-serif;font-size:18px;font-weight:700;color:var(--gold);">+' + bonus + ' SC Bonus</div>' +
+          '<div style="font-size:11px;color:var(--muted);margin-top:4px;">Claim this achievement today for bonus Smithcoins!</div>' +
+          '</div>';
+      } else {
+        el.innerHTML = '<div class="empty-state">Daily achievement not found</div>';
+      }
+    } else {
+      el.innerHTML = '<div class="empty-state">No daily achievement set</div>';
+    }
+  } catch (e) { el.innerHTML = '<div class="empty-state">Error loading daily achievement</div>'; console.error(e); }
+}
+
+// ===================== PROFILE MODAL =====================
+
+function openProfile() {
+  renderProfilePage();
+  document.getElementById('profile-modal').classList.add('open');
+}
+
+function closeProfile() {
+  document.getElementById('profile-modal').classList.remove('open');
+}
+
+function renderProfilePage() {
+  if (!currentUser || !currentUserData) return;
+
+  var claims = currentUserData.claims || {};
+  var verified = Object.entries(claims).filter(function(e) { return e[1] === 'verified'; }).map(function(e) { return e[0]; });
+  var byRarity = { Easy: 0, Normal: 0, Hard: 0, Extreme: 0 };
+  var totalEarnedSC = 0;
+  verified.forEach(function(id) {
+    var a = ALL_ACHIEVEMENTS.find(function(x) { return x.id === id; });
+    if (a) {
+      byRarity[a.rarity]++;
+      totalEarnedSC += SC_VALUES[a.rarity] || 0;
+    }
+  });
+  var earnedAchs = verified.map(function(id) { return ALL_ACHIEVEMENTS.find(function(x) { return x.id === id; }); }).filter(Boolean);
+
+  var badgesHtml = earnedAchs.length
+    ? earnedAchs.map(function(a) { return '<div class="profile-ach-badge">' + a.icon + ' ' + a.name + '</div>'; }).join('')
+    : '<div style="color:var(--muted);font-size:13px;">No achievements yet</div>';
+
+  var el = document.getElementById('profile-page-content');
+  el.innerHTML =
+    '<div style="display:flex;justify-content:flex-end;"><span style="font-size:20px;cursor:pointer;color:var(--muted);padding:4px;" onclick="closeProfile()">&times;</span></div>' +
+    '<div class="profile-header">' +
+    '<div class="profile-avatar-big">' + currentUser[0].toUpperCase() + '</div>' +
+    '<div>' +
+    '<div class="profile-name">' + currentUser + '</div>' +
+    '<div class="profile-info">' + (currentUserData.period || 'No period') + (currentUserData.isMod ? ' &bull; MOD' : '') + '</div>' +
+    '</div></div>' +
+    '<div class="profile-stats">' +
+    '<div class="profile-stat"><div class="profile-stat-num">' + verified.length + '</div><div class="profile-stat-lbl">Unlocked</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num">' + (ALL_ACHIEVEMENTS.length - verified.length) + '</div><div class="profile-stat-lbl">Remaining</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--gold);">' + (currentUserData.smithcoins||0).toLocaleString() + '</div><div class="profile-stat-lbl">SC Balance</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--gold);">' + totalEarnedSC.toLocaleString() + '</div><div class="profile-stat-lbl">SC Earned</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--easy-color);">' + byRarity.Easy + '</div><div class="profile-stat-lbl">Easy</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--normal-color);">' + byRarity.Normal + '</div><div class="profile-stat-lbl">Normal</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--hard-color);">' + byRarity.Hard + '</div><div class="profile-stat-lbl">Hard</div></div>' +
+    '<div class="profile-stat"><div class="profile-stat-num" style="color:var(--extreme-color);">' + byRarity.Extreme + '</div><div class="profile-stat-lbl">Extreme</div></div>' +
+    '</div>' +
+    '<div class="section-label">Earned Achievements</div>' +
+    '<div class="profile-ach-list">' + badgesHtml + '</div>';
+}
+
+// ===================== SUGGESTIONS =====================
+
+function openSuggestModal() {
+  document.getElementById('suggest-modal').classList.add('open');
+  document.getElementById('suggest-err').textContent = '';
+}
+
+function closeSuggestModal() {
+  document.getElementById('suggest-modal').classList.remove('open');
+}
+
+async function submitSuggestion() {
+  var name = document.getElementById('suggest-name').value.trim();
+  var desc = document.getElementById('suggest-desc').value.trim();
+  var rarity = document.getElementById('suggest-rarity').value;
+  var errEl = document.getElementById('suggest-err');
+  if (!name || !desc) { errEl.textContent = 'Fill in all fields'; return; }
+  try {
+    await db.collection('suggestions').doc().set({
+      name: name, desc: desc, rarity: rarity, user: currentUser, time: Date.now()
+    });
+    closeSuggestModal();
+    document.getElementById('suggest-name').value = '';
+    document.getElementById('suggest-desc').value = '';
+    showPopup('Suggestion submitted!');
+  } catch (e) { errEl.textContent = 'Error submitting'; console.error(e); }
+}
+
+// ===================== ENTER KEY LOGIN =====================
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    var loginPage = document.getElementById('page-login');
+    var signupPage = document.getElementById('page-signup');
+    if (loginPage.classList.contains('active')) doLogin();
+    else if (signupPage.classList.contains('active')) doSignup();
+  }
+});
+</script>
+</body>
+</html>
