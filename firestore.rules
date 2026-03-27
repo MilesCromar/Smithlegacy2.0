@@ -2,63 +2,102 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users collection
-    match /users/{userId} {
-      // Anyone logged in can read any user (needed for leaderboard)
-      allow read: if request.auth != null;
-      // User can create their own doc on signup
-      allow create: if request.auth != null
-                    && request.auth.token.email == userId + '@smithlegacy.app';
-      // User can update their own doc (claims, smithcoins, daily reward, unlocks)
-      allow update: if request.auth != null
-                    && request.auth.token.email == userId + '@smithlegacy.app';
-      // Mods can update any user doc (verify/deny claims, award SC)
-      allow update: if request.auth != null
-                    && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
-      // Mods can delete users (server reset)
-      allow delete: if request.auth != null
-                    && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+    // Ownership check — email must match username@smithlegacy.app
+    function isOwner(userId) {
+      return request.auth.token.email == (userId + '@smithlegacy.app');
     }
 
-    // Claims collection (pending achievement claims)
+    // Hardcoded mod check — can't be faked even from console
+    function isMod() {
+      return request.auth.token.email == 'milesthegoat@smithlegacy.app'
+          || request.auth.token.email == 'thecreator@smithlegacy.app';
+    }
+
+    // Only milesthegoat can do destructive operations
+    function isSuperMod() {
+      return request.auth.token.email == 'milesthegoat@smithlegacy.app';
+    }
+
+    // ========== USERS ==========
+    match /users/{userId} {
+      allow read: if request.auth != null;
+
+      // CREATE: only your own doc, can't fake mod status
+      allow create: if request.auth != null
+                    && isOwner(userId)
+                    && request.resource.data.smithcoins == 0
+                    && request.resource.data.claims == {}
+                    && request.resource.data.pendingClaims == {}
+                    && request.resource.data.unlockedAchievements == []
+                    && request.resource.data.lastClaimed == ''
+                    && (request.resource.data.isMod == false
+                        || (request.resource.data.isMod == true && isMod()));
+
+      // UPDATE OWN DOC: locked down field by field
+      allow update: if request.auth != null
+                    && isOwner(userId)
+                    // Can NEVER change these:
+                    && request.resource.data.isMod == resource.data.isMod
+                    && request.resource.data.period == resource.data.period
+                    // Claims can ONLY be changed by mods (not you)
+                    && request.resource.data.claims == resource.data.claims
+                    // Smithcoins can't go negative
+                    && request.resource.data.smithcoins >= 0;
+
+      // MODS can update ANY user doc (verify claims, award SC, etc)
+      allow update: if request.auth != null && isMod();
+
+      // Only super mod can delete (server reset)
+      allow delete: if request.auth != null && isSuperMod();
+    }
+
+    // ========== CLAIMS QUEUE ==========
     match /claims/{claimId} {
       allow read: if request.auth != null;
-      // Any logged-in user can create a claim
+      // Anyone logged in can submit a claim
       allow create: if request.auth != null;
-      // Mods can delete claims (verify/deny)
-      allow delete: if request.auth != null
-                    && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+      // ONLY mods can delete (verify/deny removes from queue)
+      allow delete: if request.auth != null && isMod();
+      // Nobody can update a claim once submitted
+      allow update: if false;
     }
 
-    // First earners
+    // ========== FIRST EARNERS ==========
     match /firstEarners/{achId} {
       allow read: if request.auth != null;
-      // Mods can create/delete first earners
-      allow create, delete: if request.auth != null
-                            && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+      // ONLY mods can write
+      allow create, delete: if request.auth != null && isMod();
+      allow update: if false;
     }
 
-    // Announcements
+    // ========== ANNOUNCEMENTS ==========
     match /announcements/{docId} {
       allow read: if request.auth != null;
-      // Mods can create/update/delete announcements
-      allow write: if request.auth != null
-                   && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+      // ONLY mods can write
+      allow write: if request.auth != null && isMod();
     }
 
-    // Daily Achievement
+    // ========== DAILY ACHIEVEMENT ==========
     match /dailyAchievement/{docId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null
-                   && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+      // ONLY mods can write
+      allow write: if request.auth != null && isMod();
     }
 
-    // Suggestions
+    // ========== SUGGESTIONS ==========
     match /suggestions/{sugId} {
       allow read: if request.auth != null;
+      // Anyone logged in can submit
       allow create: if request.auth != null;
-      allow delete: if request.auth != null
-                    && get(/databases/$(database)/documents/users/$(request.auth.token.email.split('@')[0])).data.isMod == true;
+      // ONLY mods can delete
+      allow delete: if request.auth != null && isMod();
+      // Nobody can edit a suggestion
+      allow update: if false;
+    }
+
+    // ========== CATCH ALL — deny everything else ==========
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

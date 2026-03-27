@@ -9,128 +9,132 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scrollbar-width: none; }
     html::-webkit-scrollbar { display: none; }
-    body { font-family: 'Inter', sans-serif; background: #c8c8c8; color: #2a2a2a; min-height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; min-height: 100vh; }
     :root {
-      --bg: #c8c8c8; --surface: #d8d8d8; --surface2: #e0e0e0; --border: #b0b0b0;
-      --dark: #2a2a2a; --dark2: #3a3a3a; --muted: #6a6a6a; --gold: #f0c040;
-      --green: #3a8a3a; --red: #c03030; --blue: #3a6a9a;
-      --easy-color: #2eaa2e; --normal-color: #2870c0; --hard-color: #e02020; --extreme-color: #e8a800;
+      --bg: #0f1923; --surface: #1a2736; --surface2: #1e2f40; --border: #2a3f55;
+      --dark: #0a1219; --dark2: #142230; --muted: #7a8fa0; --gold: #f0c040;
+      --green: #4caf50; --red: #ef5350; --blue: #42a5f5;
+      --easy-color: #4caf50; --normal-color: #42a5f5; --hard-color: #ef5350; --extreme-color: #ab47bc;
+      --glow: rgba(240, 192, 64, 0.08);
     }
 
     .page { display: none; min-height: calc(100vh - 72px); }
     .page.active { display: block; }
 
     /* Top Bar */
-    .top-bar { background: var(--dark); color: #e0e0e0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; height: 48px; }
-    .top-bar-logo { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e0e0e0; white-space: nowrap; }
+    .top-bar { background: var(--dark); color: #e0e0e0; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; height: 52px; border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .top-bar-logo { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
     .top-bar-nav { display: flex; align-items: center; gap: 4px; position: absolute; left: 50%; transform: translateX(-50%); }
-    .nav-tab { padding: 6px 14px; border: none; background: transparent; color: #888; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-    .nav-tab:hover { color: #ccc; }
-    .nav-tab.active { color: #e0e0e0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+    .nav-tab { padding: 8px 16px; border: none; background: transparent; color: var(--muted); font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; white-space: nowrap; border-radius: 6px; }
+    .nav-tab:hover { color: #ccc; background: rgba(255,255,255,0.05); }
+    .nav-tab.active { color: var(--gold); background: rgba(240,192,64,0.1); }
     .top-bar-right { display: flex; align-items: center; gap: 12px; }
     .sc-display { display: flex; align-items: center; gap: 5px; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); }
-    .sc-icon { font-size: 16px; }
-    .top-bar-avatar { width: 30px; height: 30px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; color: var(--dark); cursor: pointer; }
-    .top-bar-logout { background: none; border: none; color: #888; font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; padding: 4px 8px; }
-    .top-bar-logout:hover { color: #e0e0e0; }
+    .sc-icon { font-size: 14px; color: var(--muted); }
+    .top-bar-avatar { width: 32px; height: 32px; background: linear-gradient(135deg, var(--gold), #e8a800); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 15px; color: var(--dark); cursor: pointer; border-radius: 50%; transition: transform 0.15s; }
+    .top-bar-avatar:hover { transform: scale(1.1); }
+    .top-bar-logout { background: none; border: none; color: var(--muted); font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; padding: 4px 8px; transition: color 0.15s; }
+    .top-bar-logout:hover { color: var(--red); }
 
     /* Container */
-    .container { max-width: 520px; margin: 0 auto; padding: 16px; }
+    .container { max-width: 700px; margin: 0 auto; padding: 16px; }
 
     /* Cards */
-    .card { background: var(--surface); border: 2px solid var(--border); padding: 16px; margin-bottom: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; }
 
     /* Buttons */
-    .btn { display: block; width: 100%; padding: 12px; background: var(--dark); color: #e0e0e0; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 2px solid #1a1a1a; cursor: pointer; transition: opacity 0.15s; }
-    .btn:hover { opacity: 0.85; }
-    .btn:active { opacity: 0.7; }
-    .btn-ghost { background: transparent; border: 2px solid var(--border); color: var(--muted); }
-    .btn-ghost:hover { border-color: var(--dark); color: var(--dark); }
+    .btn { display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #2a4a6a, #1e3a55); color: #e0e0e0; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+    .btn:hover { background: linear-gradient(135deg, #345a7a, #2a4a65); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+    .btn-ghost:hover { border-color: #4a6a8a; color: #c0c0c0; background: rgba(255,255,255,0.03); }
     .btn-sm { display: inline-block; width: auto; padding: 6px 16px; font-size: 13px; letter-spacing: 1px; }
-    .btn-green { background: var(--green); border-color: #2a6a2a; }
-    .btn-red { background: var(--red); border-color: #901818; }
-    .btn-gold { background: var(--gold); border-color: #c8a030; color: var(--dark); }
+    .btn-green { background: linear-gradient(135deg, var(--green), #388e3c); border-color: #2e7d32; }
+    .btn-green:hover { background: linear-gradient(135deg, #5cb860, #43a047); }
+    .btn-red { background: linear-gradient(135deg, var(--red), #d32f2f); border-color: #c62828; }
+    .btn-red:hover { background: linear-gradient(135deg, #f06060, #e53935); }
+    .btn-gold { background: linear-gradient(135deg, var(--gold), #e8a800); border-color: #c8a030; color: var(--dark); }
+    .btn-gold:hover { background: linear-gradient(135deg, #f5d050, #f0c040); }
 
     /* Fields */
     .field { margin-bottom: 14px; }
     .field label { display: block; font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
-    .field input, .field select { width: 100%; background: var(--surface2); border: 2px solid var(--border); padding: 10px 12px; color: var(--dark); font-size: 15px; outline: none; font-family: 'Inter', sans-serif; }
-    .field input:focus, .field select:focus { border-color: var(--dark); }
-    .field select option { background: var(--surface2); }
+    .field input, .field select { width: 100%; background: var(--surface2); border: 1px solid var(--border); padding: 10px 16px; color: #e0e0e0; font-size: 15px; outline: none; font-family: 'Inter', sans-serif; border-radius: 50px; transition: border-color 0.2s; }
+    .field input:focus, .field select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(240,192,64,0.15); }
+    .field select option { background: var(--surface2); color: #e0e0e0; }
 
     /* Auth pages */
-    .auth-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
-    .auth-card { background: var(--surface); border: 2px solid var(--border); padding: 32px 24px; max-width: 400px; width: 100%; }
-    .auth-logo { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 4px; color: var(--dark); }
+    .auth-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; background: radial-gradient(ellipse at top, #142230 0%, var(--bg) 70%); }
+    .auth-card { background: var(--surface); border: 1px solid var(--border); padding: 32px 28px; max-width: 400px; width: 100%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .auth-logo { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 4px; color: var(--gold); }
     .auth-sub { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 28px; }
     .link-row { text-align: center; margin-top: 14px; font-size: 13px; color: var(--muted); }
-    .link { color: var(--dark); cursor: pointer; text-decoration: underline; font-weight: 600; }
+    .link { color: var(--gold); cursor: pointer; text-decoration: underline; font-weight: 600; }
     .err { color: var(--red); font-size: 13px; text-align: center; margin-top: 8px; min-height: 18px; }
 
     /* Announcement Banner */
-    .announce-banner { background: #e8e0c8; border: 2px solid var(--gold); padding: 12px 16px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; }
+    .announce-banner { background: rgba(240,192,64,0.08); border: 1px solid rgba(240,192,64,0.3); padding: 12px 20px; margin-bottom: 12px; display: none; align-items: center; gap: 10px; border-radius: 50px; }
     .announce-banner.show { display: flex; }
     .announce-banner-icon { font-size: 18px; flex-shrink: 0; }
-    .announce-banner-text { font-size: 13px; color: var(--dark); flex: 1; line-height: 1.5; font-weight: 500; }
+    .announce-banner-text { font-size: 13px; color: #e0e0e0; flex: 1; line-height: 1.5; font-weight: 500; }
 
     /* Daily Reward */
-    .daily-reward { background: var(--surface); border: 2px solid var(--gold); padding: 16px; margin-bottom: 12px; text-align: center; }
-    .daily-reward-title { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .daily-reward { background: var(--surface); border: 1px solid rgba(240,192,64,0.3); padding: 16px 24px; margin-bottom: 12px; text-align: center; border-radius: 20px; }
+    .daily-reward-title { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; color: var(--gold); }
     .daily-reward .btn-gold { margin-top: 8px; }
     .daily-claimed { color: var(--muted); font-size: 13px; font-weight: 500; }
 
     /* Stats Row */
     .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-    .stat-box { background: var(--surface); border: 2px solid var(--border); padding: 12px; text-align: center; }
-    .stat-num { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--dark); }
+    .stat-box { background: var(--surface); border: 1px solid var(--border); padding: 12px; text-align: center; border-radius: 50px; }
+    .stat-num { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #e0e0e0; }
     .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
     /* Progress */
     .prog-wrap { margin-bottom: 16px; }
     .prog-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
     .prog-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
-    .prog-count { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; }
-    .prog-track { background: var(--border); height: 8px; overflow: hidden; }
-    .prog-fill { height: 100%; background: var(--dark); transition: width 0.6s ease; }
+    .prog-count { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: #e0e0e0; }
+    .prog-track { background: var(--dark); height: 8px; overflow: hidden; border-radius: 50px; }
+    .prog-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #e8a800); transition: width 0.6s ease; border-radius: 50px; }
 
     /* Filter Bar */
     .filter-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-    .filter-btn { padding: 6px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; border: 2px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Rajdhani', sans-serif; transition: all 0.15s; }
-    .filter-btn:hover { border-color: var(--dark); color: var(--dark); }
-    .filter-btn.active { background: var(--dark); border-color: #1a1a1a; color: #e0e0e0; }
+    .filter-btn { padding: 6px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Rajdhani', sans-serif; transition: all 0.15s; border-radius: 50px; }
+    .filter-btn:hover { border-color: #4a6a8a; color: #c0c0c0; }
+    .filter-btn.active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
 
-    /* Achievement Cards */
-    .ach-card { background: var(--surface); border: 2px solid var(--border); margin-bottom: 8px; display: flex; align-items: center; cursor: pointer; transition: border-color 0.15s; min-height: 80px; position: relative; overflow: hidden; }
-    .ach-card:hover { border-color: var(--dark); }
-    .ach-card.done { border-color: var(--green); background: #d0e8d0; }
-    .ach-card.pending { border-color: var(--gold); background: #e8e0c8; cursor: default; }
-    .ach-card.pending:hover { border-color: var(--gold); }
-    .ach-card.locked { border-color: var(--border); background: #c0c0c0; cursor: pointer; }
-    .ach-card.locked:hover { border-color: var(--dark); }
-    .ach-card-bar { width: 4px; align-self: stretch; flex-shrink: 0; background: var(--border); }
-    .ach-card.done .ach-card-bar { background: var(--green); }
-    .ach-card.pending .ach-card-bar { background: var(--gold); }
-    .ach-card.locked .ach-card-bar { background: #999; }
-    .ach-card-icon-wrap { width: 72px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .ach-card-icon { width: 50px; height: 50px; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative; }
-    .ach-card.done .ach-card-icon { border-color: var(--green); }
-    .ach-card.locked .ach-card-icon { border-color: #999; }
-    .ach-rarity { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; padding: 1px 6px; white-space: nowrap; letter-spacing: 0.5px; text-transform: uppercase; }
-    .rarity-easy { background: var(--easy-color); color: #fff; }
-    .rarity-normal { background: var(--normal-color); color: #fff; }
-    .rarity-hard { background: var(--hard-color); color: #fff; }
-    .rarity-extreme { background: var(--extreme-color); color: var(--dark); }
-    .ach-card-body { flex: 1; padding: 12px 10px 12px 4px; }
-    .ach-card-label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+    /* Achievement Cards — Pill Style */
+    .ach-card { background: var(--surface); border: 1px solid var(--border); border-radius: 50px; margin-bottom: 10px; display: flex; align-items: center; padding: 8px 20px 8px 8px; gap: 14px; cursor: pointer; transition: all 0.2s; }
+    .ach-card:hover { border-color: #4a6a8a; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .ach-card.done { border-color: var(--green); background: rgba(76,175,80,0.08); }
+    .ach-card.pending { border-color: var(--gold); background: rgba(240,192,64,0.06); cursor: default; }
+    .ach-card.pending:hover { border-color: var(--gold); transform: none; box-shadow: none; }
+    .ach-card.denied { border-color: var(--red); background: rgba(239,83,80,0.06); }
+    .ach-card.denied .ach-card-icon { border-color: var(--red); background: rgba(239,83,80,0.15); }
+    .ach-card.locked { border-color: var(--border); background: rgba(0,0,0,0.15); cursor: pointer; }
+    .ach-card.locked:hover { border-color: #4a6a8a; }
+    .ach-card-bar { display: none; }
+    .ach-card-icon-wrap { width: auto; height: auto; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .ach-card-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(42,63,85,0.4); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 26px; position: relative; }
+    .ach-card-icon.icon-easy { border-color: var(--easy-color); background: rgba(76,175,80,0.15); }
+    .ach-card-icon.icon-normal { border-color: var(--normal-color); background: rgba(66,165,245,0.15); }
+    .ach-card-icon.icon-hard { border-color: var(--hard-color); background: rgba(239,83,80,0.15); }
+    .ach-card-icon.icon-extreme { border-color: var(--extreme-color); background: rgba(171,71,188,0.15); }
+    .ach-card.done .ach-card-icon { border-color: var(--green); background: rgba(76,175,80,0.15); }
+    .ach-card.locked .ach-card-icon { border-color: #4a5568; background: rgba(0,0,0,0.2); }
+    .ach-rarity { display: none; }
+    .ach-card-body { flex: 1; padding: 4px 0; }
+    .ach-card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; font-weight: 600; }
     .ach-card-label.verified { color: var(--green); }
-    .ach-card-label.pending-lbl { color: #a08020; }
-    .ach-card-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.1; margin-bottom: 3px; }
-    .ach-card-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
-    .ach-card-right { padding: 0 14px 0 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+    .ach-card-label.pending-lbl { color: var(--gold); }
+    .ach-card-name { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.1; margin-bottom: 2px; color: #e0e0e0; }
+    .ach-card-desc { font-size: 11px; color: var(--muted); line-height: 1.3; }
+    .ach-card-right { padding: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
     .ach-sc { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--gold); }
-    .ach-check { width: 24px; height: 24px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .ach-check { width: 24px; height: 24px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; border-radius: 50%; }
     .ach-card.done .ach-check { border-color: var(--green); background: var(--green); color: #fff; }
-    .ach-card.pending .ach-check { border-color: var(--gold); background: rgba(240,192,64,0.3); color: #a08020; }
+    .ach-card.pending .ach-check { border-color: var(--gold); background: rgba(240,192,64,0.2); color: var(--gold); }
     .first-earner { font-size: 10px; color: var(--gold); font-weight: 600; margin-top: 2px; }
 
     /* Coin Flip */
@@ -139,11 +143,12 @@
     .flip-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin-bottom: 24px; }
     .flip-input-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
     .flip-pick { display: flex; gap: 8px; margin-bottom: 16px; }
-    .flip-pick-btn { flex: 1; padding: 10px; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: 2px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
-    .flip-pick-btn:hover { border-color: var(--dark); color: var(--dark); }
-    .flip-pick-btn.active { background: var(--dark); border-color: #1a1a1a; color: #e0e0e0; }
-    .flip-input { flex: 1; background: var(--surface2); border: 2px solid var(--border); padding: 12px; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; text-align: center; color: var(--dark); outline: none; }
-    .flip-input:focus { border-color: var(--dark); }
+    .flip-pick-btn { flex: 1; padding: 10px; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; border-radius: 50px; }
+    .flip-pick-btn:hover { border-color: #4a6a8a; color: #c0c0c0; }
+    .flip-pick-btn[data-side="heads"].active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+    .flip-pick-btn[data-side="tails"].active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .flip-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); padding: 12px; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; text-align: center; color: #e0e0e0; outline: none; border-radius: 50px; }
+    .flip-input:focus { border-color: var(--gold); }
     .flip-input::placeholder { color: var(--muted); }
     .flip-result { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; min-height: 50px; display: flex; align-items: center; justify-content: center; margin-top: 16px; }
     .flip-result.win { color: var(--green); }
@@ -157,16 +162,17 @@
     }
     .flip-history { margin-top: 20px; }
     .flip-history-title { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
-    .flip-history-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--surface); border: 2px solid var(--border); margin-bottom: 4px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; }
+    .flip-history-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 6px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; border-radius: 50px; }
 
     /* Leaderboard */
-    .lb-toggle { display: flex; background: var(--surface); border: 2px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+    .lb-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; border-radius: 50px; }
     .lb-toggle-btn { flex: 1; padding: 10px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
-    .lb-toggle-btn.active { background: var(--dark); color: #e0e0e0; }
-    .lb-row { background: var(--surface); border: 2px solid var(--border); padding: 14px 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 14px; }
-    .lb-row.first { border-color: var(--gold); background: #e8e0c8; }
-    .lb-row.me { border-color: var(--dark); background: #d0d0d0; }
-    .lb-row.first.me { border-color: var(--gold); background: #e8e0c8; }
+    .lb-toggle-btn.active { background: var(--gold); color: var(--dark); }
+    .lb-row { background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; border-radius: 50px; transition: all 0.15s; }
+    .lb-row:hover { border-color: #4a6a8a; }
+    .lb-row.first { border-color: rgba(240,192,64,0.4); background: rgba(240,192,64,0.06); }
+    .lb-row.me { border-color: var(--blue); background: rgba(66,165,245,0.06); }
+    .lb-row.first.me { border-color: rgba(240,192,64,0.4); background: rgba(240,192,64,0.06); }
     .lb-icon { font-size: 22px; width: 36px; text-align: center; }
     .lb-rank { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; width: 30px; text-align: center; color: var(--muted); }
     .lb-name { flex: 1; font-size: 14px; font-weight: 600; }
@@ -174,56 +180,56 @@
     .lb-pts { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); }
 
     /* Period rows */
-    .period-row { background: var(--surface); border: 2px solid var(--border); padding: 14px 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 14px; }
-    .period-row.first { border-color: var(--gold); background: #e8e0c8; }
+    .period-row { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 6px; display: flex; align-items: center; gap: 14px; border-radius: 10px; }
+    .period-row.first { border-color: rgba(240,192,64,0.4); background: rgba(240,192,64,0.06); }
     .period-icon { font-size: 22px; width: 36px; text-align: center; }
 
     /* Modal */
-    .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
     .modal-wrap.open { display: flex; }
-    .modal { background: var(--surface); border: 2px solid var(--border); padding: 24px; max-width: 380px; width: 100%; }
-    .modal-preview { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 2px solid var(--border); padding: 12px; margin-bottom: 16px; }
-    .modal-icon-big { font-size: 28px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 2px solid var(--border); flex-shrink: 0; }
+    .modal { background: var(--surface); border: 1px solid var(--border); padding: 24px; max-width: 380px; width: 100%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .modal-preview { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); padding: 12px 16px; margin-bottom: 16px; border-radius: 50px; }
+    .modal-icon-big { font-size: 28px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--dark); border: 1px solid var(--border); flex-shrink: 0; border-radius: 50%; }
     .modal-ach-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; }
     .modal-ach-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .modal-question { font-size: 14px; text-align: center; margin-bottom: 16px; line-height: 1.6; }
+    .modal-question { font-size: 14px; text-align: center; margin-bottom: 16px; line-height: 1.6; color: #c0c0c0; }
     .modal-warning { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 16px; }
     .modal-btns { display: flex; gap: 8px; }
     .modal-btns .btn { flex: 1; }
 
     /* Popup toast */
-    .popup { position: fixed; bottom: 80px; right: 12px; z-index: 200; background: var(--dark); border: 2px solid var(--green); padding: 12px 16px; max-width: 300px; display: none; color: #e0e0e0; }
+    .popup { position: fixed; bottom: 80px; right: 12px; z-index: 200; background: var(--surface); border: 1px solid var(--green); padding: 12px 20px; max-width: 300px; display: none; color: #e0e0e0; border-radius: 50px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
     .popup.show { display: block; animation: popUp 0.3s ease; }
     @keyframes popUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .popup-title { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
-    .popup-msg { font-size: 12px; color: #b0b0b0; }
+    .popup-msg { font-size: 12px; color: var(--muted); }
 
     /* Mod Queue */
-    .mod-card { background: var(--surface); border: 2px solid var(--border); padding: 14px; margin-bottom: 8px; }
+    .mod-card { background: var(--surface); border: 1px solid var(--border); padding: 16px 20px; margin-bottom: 8px; border-radius: 20px; }
     .mod-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .mod-student { font-size: 15px; font-weight: 600; }
-    .mod-period { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border: 1px solid var(--border); font-weight: 600; }
-    .mod-ach { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: var(--surface2); border: 2px solid var(--border); padding: 10px; }
+    .mod-period { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 10px; border: 1px solid var(--border); font-weight: 600; border-radius: 50px; }
+    .mod-ach { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: var(--surface2); border: 1px solid var(--border); padding: 10px 16px; border-radius: 50px; }
     .mod-ach-icon { font-size: 20px; }
     .mod-ach-name { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; }
     .mod-ach-desc { font-size: 11px; color: var(--muted); }
     .mod-actions { display: flex; gap: 8px; }
-    .mod-announce-wrap { background: var(--surface); border: 2px solid var(--border); padding: 14px; margin-bottom: 12px; }
-    .mod-announce-input { width: 100%; background: var(--surface2); border: 2px solid var(--border); padding: 10px; color: var(--dark); font-size: 14px; outline: none; resize: none; font-family: 'Inter', sans-serif; }
-    .mod-announce-input:focus { border-color: var(--dark); }
+    .mod-announce-wrap { background: var(--surface); border: 1px solid var(--border); padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; }
+    .mod-announce-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); padding: 10px 16px; color: #e0e0e0; font-size: 14px; outline: none; resize: none; font-family: 'Inter', sans-serif; border-radius: 14px; }
+    .mod-announce-input:focus { border-color: var(--gold); }
     .mod-sort-toggle { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; margin-bottom: 10px; display: inline-block; font-weight: 600; }
 
     /* Profile Page */
     .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-    .profile-avatar-big { width: 64px; height: 64px; background: var(--dark); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 28px; color: var(--gold); flex-shrink: 0; }
-    .profile-name { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 1px; }
+    .profile-avatar-big { width: 64px; height: 64px; background: linear-gradient(135deg, var(--gold), #e8a800); display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 28px; color: var(--dark); flex-shrink: 0; border-radius: 50%; }
+    .profile-name { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 1px; color: #e0e0e0; }
     .profile-info { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; }
     .profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-    .profile-stat { background: var(--surface2); border: 2px solid var(--border); padding: 12px; text-align: center; }
-    .profile-stat-num { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; }
+    .profile-stat { background: var(--surface2); border: 1px solid var(--border); padding: 12px; text-align: center; border-radius: 14px; }
+    .profile-stat-num { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: #e0e0e0; }
     .profile-stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; font-weight: 600; }
     .profile-ach-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-    .profile-ach-badge { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 2px solid var(--border); padding: 4px 10px; font-size: 12px; font-weight: 600; }
+    .profile-ach-badge { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px solid var(--border); padding: 4px 12px; font-size: 12px; font-weight: 600; border-radius: 50px; }
 
     /* Unlock modal */
     .unlock-cost { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold); text-align: center; margin-bottom: 8px; }
@@ -235,8 +241,8 @@
     .section-label { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin: 16px 0 8px; font-weight: 600; }
 
     /* Suggest button */
-    .suggest-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: var(--surface); border: 2px solid var(--border); color: var(--dark); font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; margin-bottom: 12px; }
-    .suggest-btn:hover { border-color: var(--dark); }
+    .suggest-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; margin-bottom: 12px; border-radius: 50px; }
+    .suggest-btn:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
 <body>
@@ -595,6 +601,7 @@ async function doLogin() {
     currentUserData = doc.data();
     if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
     if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+    if (!currentUserData.pendingClaims) currentUserData.pendingClaims = {};
     enterApp();
   } catch (e) {
     console.error(e);
@@ -615,15 +622,15 @@ async function doSignup() {
   if (!pass || pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters'; return; }
   if (!period) { errEl.textContent = 'Select a class period'; return; }
   try {
-    // Check if username is already taken in Firestore
-    const existing = await db.collection('users').doc(user).get();
-    if (existing.exists) { errEl.textContent = 'Username taken'; return; }
-    // Create Firebase Auth account
+    // Create Firebase Auth account first (this also logs us in)
     const email = user + '@smithlegacy.app';
     await auth.createUserWithEmailAndPassword(email, pass);
+    // Now we're authenticated — check if Firestore doc already exists
+    const existing = await db.collection('users').doc(user).get();
+    if (existing.exists) { errEl.textContent = 'Username taken'; return; }
     // Create Firestore profile
     const isMod = MOD_USERNAMES.includes(user);
-    const userData = { isMod: isMod, period: period, claims: {}, smithcoins: 0, lastClaimed: '', unlockedAchievements: [] };
+    const userData = { isMod: isMod, period: period, claims: {}, pendingClaims: {}, smithcoins: 0, lastClaimed: '', unlockedAchievements: [] };
     await db.collection('users').doc(user).set(userData);
     currentUser = user;
     currentUserData = userData;
@@ -672,6 +679,7 @@ auth.onAuthStateChanged(async function(firebaseUser) {
     currentUserData = doc.data();
     if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
     if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+    if (!currentUserData.pendingClaims) currentUserData.pendingClaims = {};
     enterApp();
   } catch (e) { console.error('Auto-login failed:', e); }
 });
@@ -696,14 +704,16 @@ async function renderHomeStats() {
       currentUserData = doc.data();
       if (!currentUserData.smithcoins) currentUserData.smithcoins = 0;
       if (!currentUserData.unlockedAchievements) currentUserData.unlockedAchievements = [];
+      if (!currentUserData.pendingClaims) currentUserData.pendingClaims = {};
     }
   } catch (e) { console.error(e); }
 
   updateSCDisplay();
 
   const claims = currentUserData.claims || {};
+  const pendingClaims = currentUserData.pendingClaims || {};
   const verified = Object.entries(claims).filter(([, v]) => v === 'verified').map(([k]) => k);
-  const pending = Object.entries(claims).filter(([, v]) => v === 'pending').length;
+  const pending = Object.keys(pendingClaims).length;
   const totalAch = ALL_ACHIEVEMENTS.length;
 
   document.getElementById('home-stats').innerHTML = `
@@ -800,11 +810,10 @@ async function clearAnnouncement() {
 
 async function setDailyAchievement() {
   if (currentUser !== 'milesthegoat' && currentUser !== 'thecreator') return;
-  var achId = document.getElementById('daily-ach-select').value;
-  var bonus = parseInt(document.getElementById('daily-ach-bonus').value) || 50;
-  if (!achId) { showPopup('Select an achievement first', 'Error'); return; }
+  var text = document.getElementById('daily-ach-text').value.trim();
+  if (!text) { showPopup('Type something first', 'Error'); return; }
   try {
-    await db.collection('dailyAchievement').doc('current').set({ achId: achId, bonus: bonus, setBy: currentUser, time: Date.now() });
+    await db.collection('dailyAchievement').doc('current').set({ text: text, setBy: currentUser, time: Date.now() });
     showPopup('Daily achievement set!');
   } catch (e) { console.error(e); showPopup('Error setting daily achievement', 'Error'); }
 }
@@ -837,12 +846,8 @@ async function renderModHomeSection() {
       </div>
       <div class="mod-announce-wrap">
         <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Daily Achievement</div>
-        <select id="daily-ach-select" style="width:100%;background:var(--surface2);border:2px solid var(--border);padding:10px 12px;color:var(--dark);font-size:14px;font-family:'Inter',sans-serif;margin-bottom:8px;">
-          <option value="">Select an achievement</option>
-          ${ALL_ACHIEVEMENTS.map(function(a) { return '<option value="' + a.id + '">' + a.icon + ' ' + a.name + ' (' + a.rarity + ')</option>'; }).join('')}
-        </select>
-        <div class="field"><label>Bonus SC</label><input id="daily-ach-bonus" type="number" value="50" min="0" style="width:100px;" /></div>
-        <div style="display:flex;gap:8px;">
+        <textarea class="mod-announce-input" id="daily-ach-text" rows="2" placeholder="Type the daily achievement..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;">
           <button class="btn btn-sm" onclick="setDailyAchievement()">Set</button>
           <button class="btn btn-sm btn-ghost" onclick="clearDailyAchievement()">Clear</button>
         </div>
@@ -858,6 +863,9 @@ async function renderModHomeSection() {
 
   if (currentUser === 'milesthegoat') {
     html += `
+      <div class="section-label" style="margin-top:20px;">Delete Account</div>
+      <div class="field"><label>Username to delete</label><input id="delete-user-input" type="text" placeholder="Username" autocomplete="off" /></div>
+      <button class="btn btn-red btn-sm" onclick="tryDeleteAccount()">Delete Account</button>
       <div class="section-label" style="margin-top:20px;">Server Reset</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Wipes all user data, claims, and first earners. This cannot be undone.</div>
       <button class="btn btn-red" onclick="tryResetServer()">Reset Server</button>
@@ -919,7 +927,14 @@ async function modDecide(claimDocId, user, achId, decision) {
     const a = ALL_ACHIEVEMENTS.find(x => x.id === achId);
     const batch = db.batch();
     const status = decision === 'verify' ? 'verified' : 'denied';
-    batch.update(db.collection('users').doc(user), { ['claims.' + achId]: status });
+    var updateData = {
+      ['claims.' + achId]: status,
+      ['pendingClaims.' + achId]: firebase.firestore.FieldValue.delete()
+    };
+    if (decision === 'deny') {
+      updateData['deniedTime.' + achId] = Date.now();
+    }
+    batch.update(db.collection('users').doc(user), updateData);
     batch.delete(db.collection('claims').doc(claimDocId));
     await batch.commit();
 
@@ -1031,8 +1046,12 @@ function renderAchievements() {
 
 function renderFilterBar() {
   const rarities = ['All', 'Easy', 'Normal', 'Hard', 'Extreme'];
+  const colors = { All: 'var(--gold)', Easy: 'var(--easy-color)', Normal: 'var(--normal-color)', Hard: 'var(--hard-color)', Extreme: 'var(--extreme-color)' };
+  const textColors = { All: 'var(--dark)', Easy: '#fff', Normal: '#fff', Hard: '#fff', Extreme: '#fff' };
   document.getElementById('filter-bar').innerHTML = rarities.map(function(r) {
-    return '<button class="filter-btn ' + (activeFilter === r ? 'active' : '') + '" onclick="setFilter(\'' + r + '\')">' + r + '</button>';
+    var isActive = activeFilter === r;
+    var style = isActive ? ' style="background:' + colors[r] + ';border-color:' + colors[r] + ';color:' + textColors[r] + ';"' : '';
+    return '<button class="filter-btn ' + (isActive ? 'active' : '') + '"' + style + ' onclick="setFilter(\'' + r + '\')">' + r + '</button>';
   }).join('');
 }
 
@@ -1043,6 +1062,7 @@ function setFilter(f) {
 
 function renderAchList() {
   const claims = currentUserData.claims || {};
+  const pendingClaims = currentUserData.pendingClaims || {};
   const unlocked = currentUserData.unlockedAchievements || [];
   const isMod = currentUserData.isMod;
 
@@ -1075,15 +1095,25 @@ function renderAchList() {
     catMap[cat].forEach(function(a) {
       var status = claims[a.id];
       var isDone = status === 'verified';
-      var isPending = status === 'pending';
+      var hasPending = !!pendingClaims[a.id];
+      var isDenied = status === 'denied' && !hasPending;
+      var isPending = hasPending && !isDone;
       var fe = firstEarners[a.id];
+
+      // Check if denied claim can be re-tried (after 1 day)
+      var canRetry = false;
+      if (isDenied) {
+        var deniedData = currentUserData.deniedTime && currentUserData.deniedTime[a.id];
+        // Allow retry after 1 day (or if no timestamp stored, allow retry)
+        if (!deniedData || (Date.now() - deniedData) > 86400000) {
+          canRetry = true;
+        }
+      }
 
       if (a.isSecret && !a.isUnlocked && !isMod) {
         html += '<div class="ach-card locked" onclick="tryUnlock(\'' + a.id + '\')">' +
-          '<div class="ach-card-bar"></div>' +
           '<div class="ach-card-icon-wrap"><div class="ach-card-icon">🔒</div></div>' +
           '<div class="ach-card-body">' +
-          '<div class="ach-card-label">SECRET</div>' +
           '<div class="ach-card-name">??? Locked</div>' +
           '<div class="ach-card-desc">Spend ' + a.unlockCost + ' SC to reveal</div>' +
           '</div>' +
@@ -1094,26 +1124,43 @@ function renderAchList() {
         return;
       }
 
-      var cardClass = isDone ? 'done' : isPending ? 'pending' : '';
-      var labelClass = isDone ? 'verified' : isPending ? 'pending-lbl' : '';
-      var labelText = isDone ? 'VERIFIED' : isPending ? 'PENDING' : (a.isSecret ? 'SECRET' : 'ACHIEVEMENT');
+      var cardClass = isDone ? 'done' : isPending ? 'pending' : isDenied ? 'denied' : '';
       var scVal = SC_VALUES[a.rarity];
-      var onclick = (isDone || isPending || isMod) ? '' : ' onclick="tryClaimAch(\'' + a.id + '\')"';
+      var canClaim = !isDone && !isPending && (!isDenied || canRetry) && !isMod;
+      var onclick = canClaim ? ' onclick="tryClaimAch(\'' + a.id + '\')"' : '';
+
+      var rarityColors = {'Easy':'var(--easy-color)','Normal':'var(--normal-color)','Hard':'var(--hard-color)','Extreme':'var(--extreme-color)'};
+      var iconClass = 'ach-card-icon icon-' + a.rarity.toLowerCase();
+
+      var statusHtml = '';
+      if (isDone) {
+        statusHtml = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);">Verified</div>';
+      } else if (isPending) {
+        statusHtml = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);">Pending</div>';
+      } else if (isDenied && !canRetry) {
+        statusHtml = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);">Denied</div>';
+      } else if (isDenied && canRetry) {
+        statusHtml = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);">Try Again</div>';
+      } else {
+        statusHtml = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:' + rarityColors[a.rarity] + ';">' + a.rarity + '</div>';
+      }
+
+      var deniedNote = (isDenied && !canRetry) ? '<div style="font-size:10px;color:var(--red);margin-top:3px;">You can try again tomorrow</div>' : '';
+      var retryNote = (isDenied && canRetry) ? '<div style="font-size:10px;color:var(--muted);margin-top:3px;">Tap to claim again</div>' : '';
 
       html += '<div class="ach-card ' + cardClass + '"' + onclick + '>' +
-        '<div class="ach-card-bar"></div>' +
         '<div class="ach-card-icon-wrap">' +
-        '<div class="ach-card-icon">' + a.icon + '<span class="ach-rarity rarity-' + a.rarity.toLowerCase() + '">' + a.rarity + '</span></div>' +
+        '<div class="' + iconClass + '">' + a.icon + '</div>' +
         '</div>' +
         '<div class="ach-card-body">' +
-        '<div class="ach-card-label ' + labelClass + '">' + labelText + '</div>' +
         '<div class="ach-card-name">' + a.name + '</div>' +
         '<div class="ach-card-desc">' + a.desc + '</div>' +
         (fe ? '<div class="first-earner">&#11088; First: ' + fe + '</div>' : '') +
+        deniedNote + retryNote +
         '</div>' +
         '<div class="ach-card-right">' +
         '<div class="ach-sc">' + scVal + ' SC</div>' +
-        '<div class="ach-check">' + (isDone ? '&#10003;' : isPending ? '...' : '') + '</div>' +
+        statusHtml +
         '</div></div>';
     });
   });
@@ -1142,11 +1189,11 @@ async function confirmClaim() {
   if (!pendingClaimId) return;
   try {
     var batch = db.batch();
-    batch.update(db.collection('users').doc(currentUser), { ['claims.' + pendingClaimId]: 'pending' });
+    batch.update(db.collection('users').doc(currentUser), { ['pendingClaims.' + pendingClaimId]: Date.now() });
     batch.set(db.collection('claims').doc(), { user: currentUser, achId: pendingClaimId, time: Date.now() });
     await batch.commit();
-    currentUserData.claims = currentUserData.claims || {};
-    currentUserData.claims[pendingClaimId] = 'pending';
+    currentUserData.pendingClaims = currentUserData.pendingClaims || {};
+    currentUserData.pendingClaims[pendingClaimId] = Date.now();
     closeModal();
     renderAchList();
     showPopup('Achievement claim submitted!');
@@ -1245,14 +1292,15 @@ async function doFlip() {
     btn.textContent = 'Flip!';
 
     var newBalance;
+    coinEl.textContent = landed === 'heads' ? '🪙' : '🔵';
     if (win) {
       newBalance = balance + bet;
       resultEl.className = 'flip-result win';
-      resultEl.textContent = landed.toUpperCase() + '! +' + bet.toLocaleString() + ' SC!';
+      resultEl.innerHTML = '<span style="color:' + (landed === 'heads' ? 'var(--gold)' : 'var(--blue)') + ';">' + landed.toUpperCase() + '!</span> +' + bet.toLocaleString() + ' SC!';
     } else {
       newBalance = balance - bet;
       resultEl.className = 'flip-result lose';
-      resultEl.textContent = landed.toUpperCase() + '! -' + bet.toLocaleString() + ' SC.';
+      resultEl.innerHTML = '<span style="color:' + (landed === 'heads' ? 'var(--gold)' : 'var(--blue)') + ';">' + landed.toUpperCase() + '!</span> -' + bet.toLocaleString() + ' SC.';
     }
 
     await db.collection('users').doc(currentUser).update({ smithcoins: newBalance });
@@ -1274,10 +1322,12 @@ function renderFlipHistory() {
   flipHistory.forEach(function(f) {
     var pick = f.side ? f.side.toUpperCase() : '?';
     var land = f.landed ? f.landed.toUpperCase() : '?';
+    var pickColor = f.side === 'heads' ? 'var(--gold)' : 'var(--blue)';
+    var landColor = f.landed === 'heads' ? 'var(--gold)' : 'var(--blue)';
     rows += '<div class="flip-history-row">' +
-      '<span>' + f.bet.toLocaleString() + ' SC — ' + pick + '</span>' +
+      '<span>' + f.bet.toLocaleString() + ' SC — <span style="color:' + pickColor + ';">' + pick + '</span></span>' +
       '<span style="color:' + (f.win ? 'var(--green)' : 'var(--red)') + ';">' +
-      land + ' ' + (f.win ? 'WON +' + f.bet.toLocaleString() : 'LOST -' + f.bet.toLocaleString()) +
+      '<span style="color:' + landColor + ';">' + land + '</span> ' + (f.win ? 'WON +' + f.bet.toLocaleString() : 'LOST -' + f.bet.toLocaleString()) +
       '</span></div>';
   });
 
@@ -1348,23 +1398,14 @@ async function renderDailyAchievement() {
   var el = document.getElementById('daily-ach-display');
   try {
     var doc = await db.collection('dailyAchievement').doc('current').get();
-    if (doc.exists && doc.data().achId) {
+    if (doc.exists && doc.data().text) {
       var d = doc.data();
-      var a = ALL_ACHIEVEMENTS.find(function(x) { return x.id === d.achId; });
-      if (a) {
-        var bonus = d.bonus || 50;
-        el.innerHTML =
-          '<div class="card" style="text-align:center;padding:24px;">' +
-          '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Today\'s Daily Achievement</div>' +
-          '<div style="font-size:40px;margin-bottom:8px;">' + a.icon + '</div>' +
-          '<div style="font-family:\'Rajdhani\',sans-serif;font-size:22px;font-weight:700;">' + a.name + '</div>' +
-          '<div style="font-size:13px;color:var(--muted);margin-top:4px;">' + a.desc + '</div>' +
-          '<div style="margin-top:12px;font-family:\'Rajdhani\',sans-serif;font-size:18px;font-weight:700;color:var(--gold);">+' + bonus + ' SC Bonus</div>' +
-          '<div style="font-size:11px;color:var(--muted);margin-top:4px;">Claim this achievement today for bonus Smithcoins!</div>' +
-          '</div>';
-      } else {
-        el.innerHTML = '<div class="empty-state">Daily achievement not found</div>';
-      }
+      el.innerHTML =
+        '<div class="card" style="text-align:center;padding:24px;">' +
+        '<div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:12px;">Today\'s Daily Achievement</div>' +
+        '<div style="font-size:40px;margin-bottom:12px;">🎯</div>' +
+        '<div style="font-family:\'Rajdhani\',sans-serif;font-size:22px;font-weight:700;line-height:1.3;">' + d.text + '</div>' +
+        '</div>';
     } else {
       el.innerHTML = '<div class="empty-state">No daily achievement set</div>';
     }
