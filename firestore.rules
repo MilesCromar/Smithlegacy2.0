@@ -10,7 +10,13 @@ service cloud.firestore {
     // Hardcoded mod check — can't be faked even from console
     function isMod() {
       return request.auth.token.email == 'milesthegoat@smithlegacy.app'
-          || request.auth.token.email == 'thecreator@smithlegacy.app';
+          || request.auth.token.email == 'thecreator@smithlegacy.app'
+          || request.auth.token.email == 'mod1@smithlegacy.app'
+          || request.auth.token.email == 'mod2@smithlegacy.app'
+          || request.auth.token.email == 'mod3@smithlegacy.app'
+          || request.auth.token.email == 'mod4@smithlegacy.app'
+          || request.auth.token.email == 'mod5@smithlegacy.app'
+          || request.auth.token.email == 'mod6@smithlegacy.app';
     }
 
     // Only milesthegoat can do destructive operations
@@ -84,6 +90,22 @@ service cloud.firestore {
       allow write: if request.auth != null && isMod();
     }
 
+    // ========== DAILY COMPLETIONS ==========
+    match /dailyCompletions/{compId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if false;
+      allow delete: if request.auth != null && isMod();
+    }
+
+    // ========== BUG REPORTS ==========
+    match /bugReports/{bugId} {
+      allow read: if request.auth != null && isMod();
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null && isMod();
+      allow update: if false;
+    }
+
     // ========== SUGGESTIONS ==========
     match /suggestions/{sugId} {
       allow read: if request.auth != null;
@@ -93,6 +115,27 @@ service cloud.firestore {
       allow delete: if request.auth != null && isMod();
       // Nobody can edit a suggestion
       allow update: if false;
+    }
+
+    // ========== MOD NOTES ==========
+    match /modNotes/{noteId} {
+      allow read: if request.auth != null && isMod();
+      allow create: if request.auth != null && isMod();
+      allow delete: if request.auth != null && isMod();
+      allow update: if false;
+    }
+
+    // ========== CHAT ==========
+    match /chat/{msgId} {
+      allow read: if request.auth != null;
+      // Anyone logged in can send a message (max 200 chars)
+      allow create: if request.auth != null
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() <= 200;
+      // Nobody can edit messages
+      allow update: if false;
+      // Only mods can delete messages
+      allow delete: if request.auth != null && isMod();
     }
 
     // ========== CATCH ALL — deny everything else ==========

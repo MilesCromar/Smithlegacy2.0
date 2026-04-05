@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "smithlagacy2"
-  }
+  },
+  "targets": {
+    "smith-legacy": {
+      "hosting": {
+        "smithlegacy": [
+          "smithlegacy"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
