@@ -264,28 +264,35 @@
     .side-nav-dot-wrap:hover .side-nav-label { opacity: 1; color: #e0e0e0; }
     /* Intro Animation */
     .intro-screen { position: fixed; inset: 0; z-index: 9999; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; perspective: 800px; }
-    .intro-spotlight { position: absolute; width: 100%; height: 100%; z-index: 1; opacity: 0; }
-    .intro-spotlight.animate { animation: spotlightReveal 3s ease-out forwards; }
-    @keyframes spotlightReveal { 0% { opacity: 0; } 100% { opacity: 1; background: radial-gradient(ellipse at center, rgba(240,192,64,0.06) 0%, transparent 60%); } }
+    .intro-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(240,192,64,0.08) 0%, transparent 70%); z-index: 0; opacity: 0; }
+    .intro-glow.animate { animation: introGlow 3s ease-out forwards; }
+    @keyframes introGlow { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
     .intro-beams { position: absolute; width: 100%; height: 100%; z-index: 1; overflow: hidden; opacity: 0; }
-    .intro-beams.animate { animation: beamsFadeIn 3s ease-out forwards; }
+    .intro-beams.animate { animation: beamsFadeIn 2s ease-out forwards; }
     @keyframes beamsFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-    .intro-beam { position: absolute; top: 50%; left: 50%; width: 2px; height: 300vh; background: linear-gradient(180deg, transparent, rgba(240,192,64,0.05), transparent); transform-origin: top center; }
-    .intro-flash { position: absolute; inset: 0; background: rgba(240,192,64,0.3); z-index: 10; opacity: 0; pointer-events: none; }
-    .intro-flash.go { animation: introFlash 0.8s ease-out forwards; }
-    @keyframes introFlash { 0% { opacity: 0.5; } 100% { opacity: 0; } }
+    .intro-beam { position: absolute; top: 50%; left: 50%; width: 2px; height: 300vh; background: linear-gradient(180deg, transparent, rgba(240,192,64,0.04), transparent); transform-origin: top center; }
+    .intro-flash { position: absolute; inset: 0; background: rgba(255,255,255,0.4); z-index: 10; opacity: 0; pointer-events: none; }
+    .intro-flash.go { animation: introFlash 0.5s ease-out forwards; }
+    @keyframes introFlash { 0% { opacity: 0.6; } 100% { opacity: 0; } }
+
+    /* Counter (Season 1 → 2 flip) */
+    .intro-counter-wrap { position: relative; z-index: 3; height: 80px; overflow: hidden; margin-bottom: 20px; }
+    .intro-counter-track { display: flex; flex-direction: column; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .intro-counter-num { font-family: 'Rajdhani', sans-serif; font-size: 70px; font-weight: 700; height: 80px; display: flex; align-items: center; justify-content: center; letter-spacing: 8px; text-transform: uppercase; }
+    .intro-counter-label { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; color: var(--muted); position: relative; z-index: 3; opacity: 0; }
+    .intro-counter-label.animate { animation: introFadeIn 0.8s ease-out forwards; }
+
+    /* 3D Title */
     .intro-3d-wrap { position: relative; z-index: 3; transform-style: preserve-3d; text-align: center; }
-    .intro-title { font-family: 'Rajdhani', sans-serif; font-size: 72px; font-weight: 700; letter-spacing: 14px; text-transform: uppercase; color: var(--gold); opacity: 0; transform: rotateX(40deg) translateZ(-100px) translateY(40px); text-shadow: 0 2px 0 #c8a030, 0 4px 0 #b08820, 0 6px 0 #987010, 0 8px 0 #806000, 0 10px 20px rgba(0,0,0,0.6), 0 0 60px rgba(240,192,64,0.3); }
-    .intro-title.animate { animation: introTitle3D 2s cubic-bezier(0.25,0.1,0.25,1) forwards; }
-    @keyframes introTitle3D { 0% { opacity: 0; transform: rotateX(40deg) translateZ(-200px) translateY(60px); filter: blur(6px); } 60% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: rotateX(0deg) translateZ(0) translateY(0); } }
-    .intro-sub { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: 12px; text-transform: uppercase; color: #e0e0e0; opacity: 0; position: relative; z-index: 3; margin-top: 12px; }
-    .intro-sub.animate { animation: introFadeUp 1.2s ease-out forwards; }
-    .intro-line { width: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(240,192,64,0.5), transparent); margin: 24px auto; position: relative; z-index: 3; }
+    .intro-title { font-family: 'Rajdhani', sans-serif; font-size: 76px; font-weight: 700; letter-spacing: 14px; text-transform: uppercase; color: var(--gold); opacity: 0; transform: rotateX(35deg) translateZ(-80px) translateY(30px); text-shadow: 0 2px 0 #c8a030, 0 4px 0 #b08820, 0 6px 0 #987010, 0 8px 0 #806000, 0 12px 25px rgba(0,0,0,0.6), 0 0 80px rgba(240,192,64,0.2); }
+    .intro-title.animate { animation: introTitle3D 2.5s cubic-bezier(0.25,0.1,0.25,1) forwards; }
+    @keyframes introTitle3D { 0% { opacity: 0; transform: rotateX(35deg) translateZ(-200px) translateY(50px); filter: blur(8px); } 50% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: rotateX(0deg) translateZ(0) translateY(0); } }
+    .intro-line { width: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(240,192,64,0.5), transparent); margin: 20px auto; position: relative; z-index: 3; }
     .intro-line.animate { animation: introLineExpand 1.5s ease-out forwards; }
-    @keyframes introLineExpand { 0% { width: 0; } 100% { width: 450px; } }
-    .intro-tagline { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 6px; text-transform: lowercase; color: rgba(255,255,255,0.4); opacity: 0; position: relative; z-index: 3; }
-    .intro-tagline.animate { animation: introFadeUp 1s ease-out forwards; }
-    @keyframes introFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes introLineExpand { 0% { width: 0; } 100% { width: 400px; } }
+    .intro-tagline { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 6px; text-transform: lowercase; color: rgba(255,255,255,0.35); opacity: 0; position: relative; z-index: 3; }
+    .intro-tagline.animate { animation: introFadeIn 1s ease-out forwards; }
+    @keyframes introFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
     .intro-fadeout { animation: introCinematicOut 1.5s ease-in forwards; }
     @keyframes introCinematicOut { 0% { opacity: 1; filter: blur(0); } 40% { opacity: 0.9; filter: blur(2px); } 100% { opacity: 0; filter: blur(14px); } }
     .app-unblur { animation: appUnblur 1.4s ease-out forwards; }
@@ -297,13 +304,19 @@
 <!-- INTRO SCREEN -->
 <div class="intro-screen" id="intro-screen" style="display:none;">
   <div class="intro-flash" id="intro-flash"></div>
-  <div class="intro-spotlight" id="intro-spotlight"></div>
+  <div class="intro-glow" id="intro-glow"></div>
   <div class="intro-beams" id="intro-beams"></div>
+  <div class="intro-counter-label" id="intro-counter-label">Season</div>
+  <div class="intro-counter-wrap" id="intro-counter-wrap">
+    <div class="intro-counter-track" id="intro-counter-track">
+      <div class="intro-counter-num" style="color:var(--muted);">1</div>
+      <div class="intro-counter-num" style="color:var(--gold);">2</div>
+    </div>
+  </div>
   <div class="intro-3d-wrap">
     <div class="intro-title" id="intro-title">Smith Legacy</div>
   </div>
   <div class="intro-line" id="intro-line"></div>
-  <div class="intro-sub" id="intro-sub">Season 2</div>
   <div class="intro-tagline" id="intro-tagline">we back.</div>
 </div>
 
@@ -855,58 +868,83 @@ function playIntro() {
   return new Promise(function(resolve) {
     var screen = document.getElementById('intro-screen');
     var beamsEl = document.getElementById('intro-beams');
+    var track = document.getElementById('intro-counter-track');
     screen.style.display = 'flex';
 
-    // Hide text elements initially
-    ['intro-title','intro-sub','intro-line','intro-tagline'].forEach(function(id) {
+    // Hide elements initially
+    ['intro-title','intro-line','intro-tagline'].forEach(function(id) {
       document.getElementById(id).style.visibility = 'hidden';
     });
+    document.getElementById('intro-counter-label').style.visibility = 'hidden';
+    document.getElementById('intro-counter-wrap').style.visibility = 'hidden';
+    track.style.transform = 'translateY(0)';
 
-    // Create light beams radiating from center
+    // Create light beams
     for (var i = 0; i < 20; i++) {
       var beam = document.createElement('div');
       beam.className = 'intro-beam';
       beam.style.transform = 'rotate(' + (i * 18) + 'deg)';
-      beam.style.opacity = (0.2 + Math.random() * 0.3);
+      beam.style.opacity = (0.15 + Math.random() * 0.2);
       beamsEl.appendChild(beam);
     }
 
-    // Phase 1: Darkness... then spotlight slowly warms (0s)
+    // Phase 1: Darkness... glow starts (0.5s)
     setTimeout(function() {
-      document.getElementById('intro-spotlight').classList.add('animate');
-      beamsEl.classList.add('animate');
-    }, 800);
+      document.getElementById('intro-glow').classList.add('animate');
+    }, 500);
 
-    // Phase 2: 3D title rises up from below (2.5s)
+    // Phase 2: "Season" label appears, counter shows "1" (1.5s)
     setTimeout(function() {
+      var label = document.getElementById('intro-counter-label');
+      label.style.visibility = 'visible';
+      label.classList.add('animate');
+      document.getElementById('intro-counter-wrap').style.visibility = 'visible';
+    }, 1500);
+
+    // Phase 3: Hold on "1" for a beat... then FLIP to "2" (3s)
+    setTimeout(function() {
+      track.style.transform = 'translateY(-80px)';
+      // Flash + beams on the flip
       document.getElementById('intro-flash').classList.add('go');
+      beamsEl.classList.add('animate');
+    }, 3000);
+
+    // Phase 4: Counter fades out, 3D title rises in (4.5s)
+    setTimeout(function() {
+      document.getElementById('intro-counter-label').style.transition = 'opacity 0.5s';
+      document.getElementById('intro-counter-label').style.opacity = '0';
+      document.getElementById('intro-counter-wrap').style.transition = 'opacity 0.5s';
+      document.getElementById('intro-counter-wrap').style.opacity = '0';
+    }, 4500);
+
+    setTimeout(function() {
+      document.getElementById('intro-counter-label').style.display = 'none';
+      document.getElementById('intro-counter-wrap').style.display = 'none';
       var title = document.getElementById('intro-title');
       title.style.visibility = 'visible';
       title.classList.add('animate');
-    }, 2500);
+      // Second flash for the title
+      var flash = document.getElementById('intro-flash');
+      flash.classList.remove('go');
+      void flash.offsetWidth;
+      flash.classList.add('go');
+    }, 5000);
 
-    // Phase 3: Line expands (4.5s)
+    // Phase 5: Line expands (6.8s)
     setTimeout(function() {
       var line = document.getElementById('intro-line');
       line.style.visibility = 'visible';
       line.classList.add('animate');
-    }, 4500);
+    }, 6800);
 
-    // Phase 4: Season 2 (5.2s)
-    setTimeout(function() {
-      var sub = document.getElementById('intro-sub');
-      sub.style.visibility = 'visible';
-      sub.classList.add('animate');
-    }, 5200);
-
-    // Phase 5: "we back." (6.2s)
+    // Phase 6: "we back." (7.5s)
     setTimeout(function() {
       var tag = document.getElementById('intro-tagline');
       tag.style.visibility = 'visible';
       tag.classList.add('animate');
-    }, 6200);
+    }, 7500);
 
-    // Phase 6: Hold... then cinematic blur out, unblur app (8.5s)
+    // Phase 7: Hold... then cinematic blur out (10s)
     setTimeout(function() {
       showPage('page-app');
       var appEl = document.getElementById('page-app');
@@ -926,13 +964,28 @@ function playIntro() {
           resolve();
         }, 1400);
       }, 1500);
-    }, 8500);
+    }, 10000);
   });
 }
 
 function previewIntro() {
-  localStorage.removeItem('sl2_intro_' + currentUser);
-  playIntro();
+  var screen = document.getElementById('intro-screen');
+  screen.style.display = 'none';
+  screen.className = 'intro-screen';
+  document.getElementById('intro-beams').innerHTML = '';
+  document.getElementById('intro-beams').className = 'intro-beams';
+  document.getElementById('intro-glow').className = 'intro-glow';
+  document.getElementById('intro-flash').className = 'intro-flash';
+  document.getElementById('intro-title').className = 'intro-title';
+  document.getElementById('intro-line').className = 'intro-line';
+  document.getElementById('intro-tagline').className = 'intro-tagline';
+  var label = document.getElementById('intro-counter-label');
+  label.className = 'intro-counter-label';
+  label.style.cssText = '';
+  var wrap = document.getElementById('intro-counter-wrap');
+  wrap.style.cssText = '';
+  document.getElementById('intro-counter-track').style.transform = 'translateY(0)';
+  setTimeout(function() { playIntro(); }, 50);
 }
 
 async function doLogout() {
